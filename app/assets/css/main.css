@@ -3,19 +3,32 @@
 @tailwind utilities;
 
 @layer base {
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Cormorant Garamond', Georgia, serif;
     font-weight: 300;
     line-height: 1.15;
   }
 
-  body, p, span, a, li, input, textarea, button {
+  body,
+  p,
+  span,
+  a,
+  li,
+  input,
+  textarea,
+  button {
     font-family: 'Inter', system-ui, sans-serif;
     font-weight: 300;
   }
 
-  html {
-    background-color: #F5F2EC;
+  html,
+  body {
+    background-color: #f5f2ec;
     color: #262624;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -25,5 +38,33 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+  }
+}
+
+/* ─── Custom cursor — applied by CursorGallery when active ─── */
+.cursor-custom,
+.cursor-custom * {
+  cursor: none !important;
+}
+
+/* ─── Image reveal wrapper — used in clip-path scroll reveals ─ */
+.img-reveal-wrap {
+  overflow: hidden;
+}
+
+/* ─── Magnetic button — elements that move toward the cursor ── */
+.magnetic {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* ─── Reduce motion: disable expensive transitions globally ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
