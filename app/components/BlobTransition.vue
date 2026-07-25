@@ -70,7 +70,8 @@ function expand(x: number, y: number, done: () => void, duration = 0.9) {
     blob.value,
     {
       scale,
-      rotation: 5,
+      rotation: 45,
+      borderRadius: '40% 60% 70% 30% / 40% 50% 60% 50%',
       duration,
       ease: 'expo.inOut',
     },
@@ -97,7 +98,7 @@ function retract(done: () => void, duration = 0.65) {
     duration, // but gives the fade a sense of physical direction
     ease: 'power3.inOut',
     onComplete: () => {
-      gsap.set(blob.value!, { scale: 0, y: 0 });
+      gsap.set(blob.value!, { scale: 0, y: 0, borderRadius: '50%' });
       blob.value!.style.pointerEvents = 'none';
       isActive = false;
       done();
@@ -116,11 +117,13 @@ defineExpose({ expand, retract });
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background-color: #f5f2ec;
+  background-color: rgba(245, 242, 236, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   pointer-events: none;
   z-index: 9999;
   opacity: 0;
-  will-change: transform, opacity;
+  will-change: transform, opacity, backdrop-filter;
   /* Soft depth: outer glow for the lit-from-within feel at small scale,
      drop shadow for perceived weight as it spreads across the page. */
   box-shadow:

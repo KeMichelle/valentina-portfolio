@@ -21,6 +21,11 @@
       aria-hidden="true"
     >
       <img
+        :ref="
+          (el) => {
+            if (el) trailImgEls[i] = el as HTMLImageElement;
+          }
+        "
         :src="images[imageQueue[i] ?? 0]?.src"
         :alt="images[imageQueue[i] ?? 0]?.alt"
         loading="eager"
@@ -39,7 +44,7 @@ gsap.registerPlugin(ScrollTrigger);
 // ── Gallery images ──────────────────────────────────────────────
 const images = [
   { src: '/images/service-maternity.jpg', alt: 'Maternità' },
-  { src: '/images/mommy-me-01.png', alt: 'Ritratto I' },
+  { src: '/images/mommy-me-01.jpg', alt: 'Ritratto I' },
   { src: '/images/service-maternity.jpg', alt: 'Maternità' },
   { src: '/images/details-02.jpg', alt: 'Ritratto II' },
   { src: '/images/family-06.jpg', alt: 'Ritratto III' },
@@ -61,11 +66,12 @@ const TRAIL_CFG = [
 ] as const;
 
 const TRAIL = TRAIL_CFG.length;
-const LERP = 0.08;
+const LERP = 0.12;
 
 // ── DOM refs & quick setters ────────────────────────────────────
 const cursorDot = ref<HTMLElement | null>(null);
 const trailEls: HTMLElement[] = [];
+const trailImgEls: HTMLImageElement[] = [];
 
 type QS = ReturnType<typeof gsap.quickSetter>;
 let dotSetX: QS, dotSetY: QS;
@@ -75,11 +81,8 @@ const setters: Array<{ x: QS; y: QS }> = [];
 const target = { x: -400, y: -400 };
 const positions = Array.from({ length: TRAIL }, () => ({ x: -400, y: -400 }));
 
-// ── Image queue — index 0 = front slot, index N-1 = back slot ──
-// Reactive so the template re-renders when the queue advances
-const imageQueue = ref<number[]>(
-  Array.from({ length: TRAIL }, (_, i) => i % images.length),
-);
+// ── Image queue — plain array; DOM is updated directly (no Vue reactivity) ──
+const imageQueue = Array.from({ length: TRAIL }, (_, i) => i % images.length);
 let queueHead = TRAIL - 1; // tracks which image index comes next at the front
 
 // ── Visibility & cycling ────────────────────────────────────────
@@ -88,11 +91,11 @@ let isOverInteractive = false;
 let lastSwapX = -9999;
 let lastSwapY = -9999;
 
-const SWAP_DISTANCE = 180;
+const SWAP_DISTANCE = 150;
 
 // ── Show / hide (whole gallery) ─────────────────────────────────
 function show() {
-  if (isVisible) return;
+  if (isVisible || route.path !== '/') return;
   isVisible = true;
   document.body.classList.add('cursor-custom');
 
@@ -144,7 +147,18 @@ function showTrail() {
 // ── Queue advance: push new image to front, drop oldest from back ─
 function advanceQueue() {
   queueHead = (queueHead + 1) % images.length;
-  imageQueue.value = [queueHead, ...imageQueue.value.slice(0, TRAIL - 1)];
+
+  imageQueue.unshift(queueHead);
+  imageQueue.pop();
+
+  for (let i = 0; i < TRAIL; i++) {
+    const imgEl = trailImgEls[i];
+    if (imgEl) {
+      const imgData = images[imageQueue[i]!]!;
+      imgEl.src = imgData.src;
+      imgEl.alt = imgData.alt;
+    }
+  }
 }
 
 // ── Mouse tracking ──────────────────────────────────────────────
@@ -154,17 +168,6 @@ function onMouseMove(e: MouseEvent) {
 
   dotSetX?.(e.clientX - 4);
   dotSetY?.(e.clientY - 4);
-
-  // Hide the image trail when hovering over links / buttons so text is
-  // always readable and clickable without the images getting in the way.
-  const overInteractive = !!(e.target as Element)?.closest(
-    'a, button, [role="button"], input, textarea, select, label',
-  );
-  if (overInteractive !== isOverInteractive) {
-    isOverInteractive = overInteractive;
-    if (overInteractive) hideTrail();
-    else showTrail();
-  }
 
   if (!isVisible) return;
 
@@ -176,6 +179,28 @@ function onMouseMove(e: MouseEvent) {
 
     lastSwapX = e.clientX;
     lastSwapY = e.clientY;
+  }
+}
+
+function onMouseOver(e: MouseEvent) {
+  if (
+    !!(e.target as Element)?.closest(
+      'a, button, [role="button"], input, textarea, select, label',
+    )
+  ) {
+    isOverInteractive = true;
+    hideTrail();
+  }
+}
+
+function onMouseOut(e: MouseEvent) {
+  if (
+    !!(e.target as Element)?.closest(
+      'a, button, [role="button"], input, textarea, select, label',
+    )
+  ) {
+    isOverInteractive = false;
+    showTrail();
   }
 }
 
@@ -199,6 +224,21 @@ function tick() {
     setters[i]!.x(positions[i]!.x - TRAIL_CFG[i]!.w / 2);
     setters[i]!.y(positions[i]!.y - TRAIL_CFG[i]!.h / 2);
   }
+}
+
+// ── Tracking toggle ────────────────────────────────────────────
+function enableTracking() {
+  window.addEventListener('mousemove', onMouseMove, { passive: true });
+  document.addEventListener('mouseover', onMouseOver, { passive: true });
+  document.addEventListener('mouseout', onMouseOut, { passive: true });
+  gsap.ticker.add(tick);
+}
+
+function disableTracking() {
+  window.removeEventListener('mousemove', onMouseMove);
+  document.removeEventListener('mouseover', onMouseOver);
+  document.removeEventListener('mouseout', onMouseOut);
+  gsap.ticker.remove(tick);
 }
 
 // ── Route guard ─────────────────────────────────────────────────
@@ -227,7 +267,10 @@ watch(
   (path) => {
     if (path !== '/') {
       hide();
+      ctx?.revert();
+      disableTracking();
     } else {
+      enableTracking();
       nextTick(() => {
         ctx?.revert();
         resetPositions();
@@ -271,7 +314,7 @@ onMounted(() => {
   if (cursorDot.value) {
     dotSetX = gsap.quickSetter(cursorDot.value, 'x', 'px');
     dotSetY = gsap.quickSetter(cursorDot.value, 'y', 'px');
-    gsap.set(cursorDot.value, { opacity: 0 });
+    gsap.set(cursorDot.value, { opacity: 0, force3D: true });
   }
 
   trailEls.forEach((el, i) => {
@@ -280,11 +323,18 @@ onMounted(() => {
       x: gsap.quickSetter(el, 'x', 'px'),
       y: gsap.quickSetter(el, 'y', 'px'),
     };
-    gsap.set(el, { opacity: 0, rotation: TRAIL_CFG[i]!.rot, x: -400, y: -400 });
+    gsap.set(el, {
+      opacity: 0,
+      rotation: TRAIL_CFG[i]!.rot,
+      x: -400,
+      y: -400,
+      force3D: true,
+    });
   });
 
-  window.addEventListener('mousemove', onMouseMove, { passive: true });
-  gsap.ticker.add(tick);
+  if (route.path === '/') {
+    enableTracking();
+  }
 
   ctx = gsap.context(() => {
     const hero = document.querySelector('#hero');
@@ -310,8 +360,7 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener('mousemove', onMouseMove);
-  gsap.ticker.remove(tick);
+  disableTracking();
   ctx?.revert();
   document.body.classList.remove('cursor-custom');
 });

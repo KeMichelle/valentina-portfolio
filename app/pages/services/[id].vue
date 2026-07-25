@@ -51,7 +51,7 @@
             <h1
               class="hero-title font-serif text-white leading-none"
               style="
-                font-size: clamp(4.5rem, 11vw, 10rem);
+                font-size: clamp(3.2rem, 11vw, 10rem);
                 opacity: 0;
                 letter-spacing: -0.01em;
               "
@@ -89,7 +89,7 @@
       <!-- ═══════════════════════════════════════════════════
            2. STORY — editorial two-column layout
       ════════════════════════════════════════════════════ -->
-      <section ref="storyRef" class="py-20 md:py-28 px-8 md:px-16 lg:px-28">
+      <section ref="storyRef" class="py-10 md:py-28 px-8 md:px-16 lg:px-28">
         <div
           class="grid grid-cols-1 md:grid-cols-12 gap-y-16 md:gap-8 items-start max-w-screen-xl mx-auto"
         >
@@ -100,7 +100,7 @@
             <div
               ref="storyNumber"
               class="font-serif leading-none select-none text-sand"
-              style="font-size: clamp(7rem, 14vw, 16rem); opacity: 0"
+              style="font-size: clamp(4.5rem, 14vw, 16rem); opacity: 0"
             >
               {{ (service.heroTag || '01').replace(' —', '') }}
             </div>
@@ -136,26 +136,125 @@
       <!-- ═══════════════════════════════════════════════════
            3. GALLERY — vertical portrait layout
       ════════════════════════════════════════════════════ -->
+      <!-- ═══════════════════════════════════════════════════
+           3. GALLERY — vertical portrait layout (Compact & Asymmetric)
+      ════════════════════════════════════════════════════ -->
       <section
         ref="galleryRef"
-        class="py-12 md:py-16 px-8 md:px-16 lg:px-28"
+        class="py-8 md:py-16 px-8 md:px-16 lg:px-28"
         v-if="galleryImages.length"
       >
-        <div class="columns-2 md:columns-3 gap-3 md:gap-4">
-          <div
-            v-for="(img, i) in galleryImages"
-            :key="i"
-            class="img-reveal-wrap overflow-hidden break-inside-avoid mb-3 md:mb-4"
-          >
-            <NuxtImg
-              :src="img"
-              :alt="`${service.title} — ${i + 1}`"
-              format="webp"
-              width="800"
-              height="1000"
-              loading="lazy"
-              class="gallery-img w-full h-auto object-cover block"
-            />
+        <!-- Mobile Gallery (staggered 2-column, mirrors the desktop offset aesthetic) -->
+        <div class="flex gap-2 md:hidden">
+          <!-- Column A: even-index images -->
+          <div class="flex flex-col gap-2 flex-1">
+            <div
+              v-for="(img, i) in galleryImages.filter(
+                (_, idx) => idx % 2 === 0,
+              )"
+              :key="'mob-a-' + i"
+              class="img-reveal-wrap overflow-hidden"
+            >
+              <NuxtImg
+                :src="img"
+                :alt="`${service.title} — ${i * 2 + 1}`"
+                format="webp"
+                width="600"
+                height="800"
+                loading="lazy"
+                class="gallery-img w-full h-auto object-cover block"
+              />
+            </div>
+          </div>
+          <!-- Column B: odd-index images, pushed down for editorial stagger -->
+          <div class="flex flex-col gap-2 flex-1 mt-8">
+            <div
+              v-for="(img, i) in galleryImages.filter(
+                (_, idx) => idx % 2 === 1,
+              )"
+              :key="'mob-b-' + i"
+              class="img-reveal-wrap overflow-hidden"
+            >
+              <NuxtImg
+                :src="img"
+                :alt="`${service.title} — ${i * 2 + 2}`"
+                format="webp"
+                width="600"
+                height="800"
+                loading="lazy"
+                class="gallery-img w-full h-auto object-cover block"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Desktop Gallery (3 colonne sfalsate ma compatte) -->
+        <div class="hidden md:flex gap-4 lg:gap-6 max-w-screen-lg mx-auto">
+          <!-- Colonna 1 (Allineata in alto) -->
+          <div class="flex flex-col gap-4 lg:gap-6 flex-1">
+            <div
+              v-for="(img, i) in galleryImages.filter(
+                (_, index) => index % 3 === 0,
+              )"
+              :key="'col1-' + i"
+              class="img-reveal-wrap overflow-hidden"
+            >
+              <NuxtImg
+                :src="img"
+                :alt="`${service.title} — Col 1`"
+                format="webp"
+                quality="80"
+                sizes="sm:100vw md:33vw lg:400px"
+                width="800"
+                height="1000"
+                loading="lazy"
+                class="gallery-img w-full h-auto object-cover block"
+              />
+            </div>
+          </div>
+
+          <!-- Colonna 2 (Spinta leggermente in basso) -->
+          <div class="flex flex-col gap-4 lg:gap-6 flex-1 mt-12 lg:mt-16">
+            <div
+              v-for="(img, i) in galleryImages.filter(
+                (_, index) => index % 3 === 1,
+              )"
+              :key="'col2-' + i"
+              class="img-reveal-wrap overflow-hidden"
+            >
+              <NuxtImg
+                :src="img"
+                :alt="`${service.title} — Col 2`"
+                format="webp"
+                width="800"
+                height="1000"
+                loading="lazy"
+                class="gallery-img w-full h-auto object-cover block"
+              />
+            </div>
+          </div>
+
+          <!-- Colonna 3 (Spinta leggermente meno in basso) -->
+          <div class="flex flex-col gap-4 lg:gap-6 flex-1 mt-6 lg:mt-8">
+            <div
+              v-for="(img, i) in galleryImages.filter(
+                (_, index) => index % 3 === 2,
+              )"
+              :key="'col3-' + i"
+              class="img-reveal-wrap overflow-hidden"
+            >
+              <NuxtImg
+                :src="img"
+                :alt="`${service.title} — Col 3`"
+                format="webp"
+                quality="80"
+                sizes="sm:100vw md:33vw lg:400px"
+                width="800"
+                height="1000"
+                loading="lazy"
+                class="gallery-img w-full h-auto object-cover block"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -165,7 +264,7 @@
       ════════════════════════════════════════════════════ -->
       <section
         ref="experienceRef"
-        class="py-16 md:py-24 px-8 md:px-16 lg:px-28 border-t border-sand/40"
+        class="py-10 md:py-24 px-8 md:px-16 lg:px-28 border-t border-sand/40"
       >
         <div
           class="grid grid-cols-1 md:grid-cols-12 gap-y-20 md:gap-8 items-start max-w-screen-xl mx-auto"
@@ -183,7 +282,7 @@
             </p>
             <h2
               class="experience-heading font-serif font-light leading-editorial text-charcoal"
-              style="font-size: clamp(2.5rem, 5vw, 4.5rem); opacity: 0"
+              style="font-size: clamp(1.8rem, 5vw, 4.5rem); opacity: 0"
             >
               Come<br />funziona
             </h2>
@@ -207,33 +306,49 @@
             </div>
           </div>
 
-          <!-- Steps — one visible at a time, stacked absolutely -->
-          <div
-            class="md:col-span-7 md:col-start-6 relative"
-            style="min-height: 52vh"
-          >
+          <!-- Steps — stacked vertically on mobile, absolutely positioned on desktop -->
+          <div class="md:col-span-7 md:col-start-6 relative md:min-h-[52vh]">
             <div
               v-for="(step, i) in experienceSteps"
               :key="i"
-              class="experience-step absolute inset-x-0 top-0"
+              class="experience-step w-full md:absolute md:inset-x-0 md:top-0"
               style="opacity: 0; transform: translateY(32px)"
             >
-              <div class="pt-2 pb-10 border-t border-sand/40">
-                <span
-                  class="font-sans text-[10px] tracking-widest text-clay/40 tabular-nums block mb-7"
-                  >0{{ i + 1 }}</span
+              <div
+                class="flex flex-col md:flex-row gap-8 md:gap-14 items-center w-full"
+              >
+                <!-- Step Image (Hidden on small mobile, visible on tablet+) -->
+                <div
+                  class="hidden md:block w-full md:w-1/2 aspect-[4/5] overflow-hidden rounded-sm shadow-xl"
                 >
-                <h3
-                  class="font-serif font-light text-charcoal mb-5"
-                  style="font-size: clamp(1.6rem, 3vw, 2.4rem)"
+                  <NuxtImg
+                    :src="galleryImages[i % galleryImages.length]"
+                    :alt="step.title"
+                    class="step-image w-full h-full object-cover will-change-transform"
+                    style="transform: scale(1.15)"
+                  />
+                </div>
+
+                <!-- Step Text -->
+                <div
+                  class="w-full md:w-1/2 pt-2 pb-10 border-t border-sand/40 md:border-t-0"
                 >
-                  {{ step.title }}
-                </h3>
-                <p
-                  class="font-sans text-sm text-charcoal/50 font-light leading-loose max-w-md"
-                >
-                  {{ step.description }}
-                </p>
+                  <span
+                    class="font-sans text-[10px] tracking-widest text-clay/40 tabular-nums block mb-7"
+                    >0{{ i + 1 }}</span
+                  >
+                  <h3
+                    class="font-serif font-light text-charcoal mb-5"
+                    style="font-size: clamp(1.6rem, 3vw, 2.4rem)"
+                  >
+                    {{ step.title }}
+                  </h3>
+                  <p
+                    class="font-sans text-sm text-charcoal/50 font-light leading-loose max-w-md"
+                  >
+                    {{ step.description }}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -245,7 +360,7 @@
       ════════════════════════════════════════════════════ -->
       <section
         ref="includedRef"
-        class="py-20 md:py-28 px-8 md:px-16 lg:px-28 bg-charcoal"
+        class="py-12 md:py-28 px-8 md:px-16 lg:px-28 bg-charcoal"
       >
         <div class="max-w-screen-xl mx-auto">
           <p
@@ -299,97 +414,206 @@
       </section>
 
       <!-- ═══════════════════════════════════════════════════
-           6. PRICING — editorial accordion
+           6. PRICING — Conditional (Wedding vs Packages)
       ════════════════════════════════════════════════════ -->
-      <section ref="pricingRef" class="py-20 md:py-28 px-8 md:px-16 lg:px-28">
-        <div class="max-w-screen-xl mx-auto">
-          <div class="mb-16 md:mb-20">
-            <p
-              class="font-sans text-xs tracking-widest2 uppercase text-clay mb-5 pricing-label"
-              style="opacity: 0"
-            >
-              Investimento
-            </p>
-            <h2
-              class="font-serif font-light text-charcoal pricing-heading"
-              style="
-                font-size: clamp(2.5rem, 5.5vw, 5rem);
-                opacity: 0;
-                line-height: 1;
-              "
-            >
-              Scegli la tua<br />esperienza
-            </h2>
-          </div>
+      <section
+        ref="pricingRef"
+        class="py-14 md:py-32 px-8 md:px-16 lg:px-28 flex flex-col items-center"
+      >
+        <div class="max-w-screen-xl mx-auto w-full text-center mb-16 md:mb-24">
+          <p
+            class="font-sans text-xs tracking-widest2 uppercase text-clay mb-5 pricing-label"
+            style="opacity: 0"
+          >
+            Investimento
+          </p>
+          <h2
+            class="font-serif font-light text-charcoal pricing-heading"
+            style="
+              font-size: clamp(2.5rem, 5.5vw, 5rem);
+              opacity: 0;
+              line-height: 1;
+            "
+          >
+            Scegli la tua<br />esperienza
+          </h2>
+        </div>
 
-          <div class="border-t border-sand/20">
+        <!-- 3D FLIP CARDS (Hidden on Wedding) -->
+        <div
+          v-if="!['wedding', 'matrimoni', 'matrimonio'].includes(service.id)"
+          class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 max-w-4xl mx-auto w-full"
+        >
+          <!-- Studio Card (Package 1) -->
+          <div
+            class="pricing-card-wrap relative aspect-[3/4.5] w-full max-w-sm mx-auto cursor-pointer group perspective"
+            style="opacity: 0"
+            @click="activePkg = activePkg === 0 ? null : 0"
+          >
             <div
-              v-for="(pkg, i) in service.pricing"
-              :key="i"
-              class="pricing-item border-b border-sand/20 cursor-pointer group"
-              style="opacity: 0"
-              @click="activePkg = activePkg === i ? null : i"
+              class="flip-card-inner w-full h-full transition-transform duration-700 preserve-3d relative will-change-transform"
+              :class="{ 'rotate-y-180': activePkg === 0 }"
             >
-              <!-- Collapsed row -->
+              <!-- Front -->
               <div
-                class="flex items-center justify-between gap-6 py-10 md:py-12 select-none"
+                class="flip-card-front absolute inset-0 w-full h-full backface-hidden overflow-hidden rounded-sm shadow-2xl"
               >
-                <div class="flex items-baseline gap-5 md:gap-12 flex-1 min-w-0">
+                <NuxtImg
+                  src="/images/smash-cake-03.jpg"
+                  alt="Studio"
+                  class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 will-change-transform"
+                />
+                <div
+                  class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500"
+                />
+                <div
+                  class="absolute inset-0 flex flex-col items-center justify-center text-center p-8"
+                >
                   <span
-                    class="font-sans text-[10px] tracking-widest text-clay/40 tabular-nums flex-shrink-0"
-                    >0{{ i + 1 }}</span
+                    class="font-sans text-[10px] tracking-widest uppercase text-white/80 mb-3"
+                    >Location</span
                   >
                   <h3
-                    class="font-serif font-light text-charcoal transition-colors duration-500 group-hover:text-clay"
-                    style="font-size: clamp(1.8rem, 4vw, 3.2rem)"
+                    class="font-serif text-white text-4xl md:text-5xl font-light"
                   >
-                    {{ pkg.name }}
+                    In Studio
                   </h3>
-                </div>
-                <div class="flex items-center gap-6 md:gap-12 flex-shrink-0">
-                  <span
-                    class="font-serif font-light text-charcoal/55"
-                    style="font-size: clamp(1.2rem, 2.5vw, 2rem)"
-                    >{{ pkg.price }}</span
-                  >
-                  <span
-                    class="font-sans text-xs tracking-widest transition-all duration-500 w-6 text-center"
-                    :class="
-                      activePkg === i
-                        ? 'text-clay rotate-45 inline-block'
-                        : 'text-charcoal/25 group-hover:text-clay/60'
-                    "
-                    >+</span
-                  >
-                </div>
-              </div>
-
-              <!-- Expanded content -->
-              <div
-                class="overflow-hidden"
-                :style="{
-                  maxHeight: activePkg === i ? '280px' : '0px',
-                  opacity: activePkg === i ? 1 : 0,
-                  transition:
-                    'max-height 0.7s cubic-bezier(0.4,0,0.2,1), opacity 0.5s ease',
-                }"
-              >
-                <div
-                  class="pb-12 pl-8 md:pl-28 flex flex-col md:flex-row items-start gap-8 md:gap-20"
-                >
                   <p
-                    class="font-sans text-sm text-charcoal/45 font-light leading-loose max-w-md"
+                    class="mt-4 font-sans text-[9px] tracking-widest uppercase text-white/45"
                   >
-                    {{ pkg.includes }}
+                    Tocca per girare
                   </p>
-                  <NuxtLink
-                    to="/contact"
-                    class="flex-shrink-0 self-start font-sans text-xs tracking-widest uppercase text-clay border-b border-clay/40 pb-0.5 hover:text-charcoal hover:border-charcoal/40 transition-colors duration-300"
-                  >
-                    Prenota →
-                  </NuxtLink>
                 </div>
               </div>
+              <div
+                class="flip-card-back absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-charcoal text-cream flex flex-col items-center justify-center p-10 md:p-14 text-center rounded-sm shadow-2xl"
+              >
+                <h3 class="font-serif text-3xl font-light mb-2 text-white">
+                  {{ service?.pricing?.[0]?.name || 'In Studio' }}
+                </h3>
+                <span class="font-serif text-2xl text-sand mb-6">{{
+                  service?.pricing?.[0]?.price || '€ ---'
+                }}</span>
+                <p
+                  class="font-sans text-xs text-white/60 font-light leading-relaxed mb-10"
+                >
+                  {{
+                    service?.pricing?.[0]?.includes ||
+                    "Dettagli dell'esperienza"
+                  }}
+                </p>
+                <NuxtLink
+                  to="/contact"
+                  class="font-sans text-xs tracking-widest uppercase text-clay border-b border-clay/40 pb-0.5 hover:text-white hover:border-white/40 transition-colors duration-300"
+                  >Prenota la sessione →</NuxtLink
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Outdoor Card (Package 2) -->
+          <div
+            class="pricing-card-wrap relative aspect-[3/4.5] w-full max-w-sm mx-auto cursor-pointer group perspective md:mt-16"
+            style="opacity: 0"
+            @click="activePkg = activePkg === 1 ? null : 1"
+          >
+            <div
+              class="flip-card-inner w-full h-full transition-transform duration-700 preserve-3d relative will-change-transform"
+              :class="{ 'rotate-y-180': activePkg === 1 }"
+            >
+              <!-- Front -->
+              <div
+                class="flip-card-front absolute inset-0 w-full h-full backface-hidden overflow-hidden rounded-sm shadow-2xl"
+              >
+                <NuxtImg
+                  src="/images/outdoor.jpg"
+                  alt="Esterna"
+                  class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 will-change-transform"
+                />
+                <div
+                  class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-500"
+                />
+                <div
+                  class="absolute inset-0 flex flex-col items-center justify-center text-center p-8"
+                >
+                  <span
+                    class="font-sans text-[10px] tracking-widest uppercase text-white/80 mb-3"
+                    >Location</span
+                  >
+                  <h3
+                    class="font-serif text-white text-4xl md:text-5xl font-light"
+                  >
+                    In Esterna
+                  </h3>
+                  <p
+                    class="mt-4 font-sans text-[9px] tracking-widest uppercase text-white/45"
+                  >
+                    Tocca per girare
+                  </p>
+                </div>
+              </div>
+              <div
+                class="flip-card-back absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-charcoal text-cream flex flex-col items-center justify-center p-10 md:p-14 text-center rounded-sm shadow-2xl"
+              >
+                <h3 class="font-serif text-3xl font-light mb-2 text-white">
+                  {{ service?.pricing?.[1]?.name || 'In Esterna' }}
+                </h3>
+                <span class="font-serif text-2xl text-sand mb-6">{{
+                  service?.pricing?.[1]?.price || '€ ---'
+                }}</span>
+                <p
+                  class="font-sans text-xs text-white/60 font-light leading-relaxed mb-10"
+                >
+                  {{
+                    service?.pricing?.[1]?.includes ||
+                    "Dettagli dell'esperienza"
+                  }}
+                </p>
+                <NuxtLink
+                  to="/contact"
+                  class="font-sans text-xs tracking-widest uppercase text-clay border-b border-clay/40 pb-0.5 hover:text-white hover:border-white/40 transition-colors duration-300"
+                  >Prenota la sessione →</NuxtLink
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- WEDDING BANNER (Only visible for Wedding) -->
+        <div
+          v-else
+          class="w-full max-w-5xl mx-auto pricing-card-wrap"
+          style="opacity: 0"
+        >
+          <div
+            class="relative w-full aspect-[4/3] md:aspect-[21/9] overflow-hidden rounded-sm shadow-2xl group flex items-center justify-center text-center"
+          >
+            <NuxtImg
+              :src="service.cover"
+              alt="Su richiesta"
+              class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+            />
+            <div
+              class="absolute inset-0 bg-charcoal/50 group-hover:bg-charcoal/40 transition-colors duration-700"
+            />
+            <div class="relative z-10 p-8 flex flex-col items-center">
+              <h3
+                class="font-serif text-white text-3xl md:text-5xl font-light mb-4"
+              >
+                Quotazione su Misura
+              </h3>
+              <p
+                class="font-sans text-xs text-white/80 tracking-widest uppercase mb-8 max-w-md leading-relaxed"
+              >
+                Ogni storia d'amore è unica. Raccontami i dettagli del tuo
+                giorno per creare un'esperienza cucita su di te.
+              </p>
+              <NuxtLink
+                to="/contact"
+                class="font-sans text-xs tracking-widest uppercase text-clay border-b border-clay/40 pb-0.5 hover:text-white hover:border-white/40 transition-colors duration-300"
+              >
+                Richiedi informazioni →
+              </NuxtLink>
             </div>
           </div>
         </div>
@@ -400,7 +624,7 @@
       ════════════════════════════════════════════════════ -->
       <section
         ref="faqRef"
-        class="py-36 md:py-52 px-8 md:px-16 lg:px-28 border-t border-sand/40"
+        class="py-20 md:py-52 px-8 md:px-16 lg:px-28 border-t border-sand/40"
       >
         <div
           class="grid grid-cols-1 md:grid-cols-12 gap-y-20 md:gap-8 items-start max-w-screen-xl mx-auto"
@@ -414,7 +638,7 @@
             </p>
             <h2
               class="faq-heading font-serif font-light leading-editorial text-charcoal"
-              style="font-size: clamp(2rem, 4vw, 3.5rem); opacity: 0"
+              style="font-size: clamp(1.6rem, 4vw, 3.5rem); opacity: 0"
             >
               Tutto quello<br />che vuoi<br />sapere
             </h2>
@@ -518,7 +742,7 @@
             ref="ctaHeading"
             class="font-serif text-white leading-editorial mb-14"
             style="
-              font-size: clamp(3rem, 8.5vw, 9rem);
+              font-size: clamp(2rem, 8.5vw, 9rem);
               opacity: 0;
               letter-spacing: -0.01em;
             "
@@ -613,19 +837,9 @@ const includedFeatures = [
       'Guida personalizzata su abbigliamento e acconciature per valorizzare ogni scatto.',
   },
   {
-    title: 'Gallery privata online',
-    description:
-      'Accesso esclusivo alla tua collezione, protetta e disponibile per sempre.',
-  },
-  {
     title: 'File alta risoluzione',
     description:
       'Tutte le immagini in qualità professionale, pronte per la stampa in qualsiasi formato.',
-  },
-  {
-    title: 'Stampe fine art',
-    description:
-      'Disponibili à la carte o incluse nei pacchetti superiori. Carta certificata, colori duraturi.',
   },
   {
     title: 'Consegna digitale',
@@ -697,6 +911,7 @@ const ctaHeading = ref<HTMLElement>();
 
 // ── GSAP animations ──────────────────────────────────────────────────
 let ctx: gsap.Context;
+let expMm: gsap.MatchMedia | undefined;
 
 onMounted(() => {
   if (!service.value) return;
@@ -747,7 +962,7 @@ onMounted(() => {
         ease: 'none',
         scrollTrigger: {
           trigger: heroRef.value,
-          start: 'top top',
+          start: 'center center',
           end: 'bottom top',
           scrub: 1.2,
         },
@@ -883,7 +1098,7 @@ onMounted(() => {
         });
     }
 
-    // ── Experience — pinned section, scrubbed timeline ───────────────
+    // ── Experience — pinned on desktop, stacked scroll-reveals on mobile ──
     if (experienceRef.value) {
       const steps = Array.from(
         experienceRef.value.querySelectorAll<HTMLElement>('.experience-step'),
@@ -891,12 +1106,8 @@ onMounted(() => {
       const dots =
         experienceRef.value.querySelectorAll<HTMLElement>('.step-dot');
       const counterEl = stepCounterEl.value;
-      const SCROLL_PER_STEP = 320;
-      let currentStep = -1;
 
-      gsap.set(steps, { opacity: 0, y: 36 });
-
-      // Reveal label + heading when section enters view
+      // Reveal label + heading — all breakpoints
       gsap.fromTo(
         [
           experienceRef.value.querySelector('.experience-label'),
@@ -934,75 +1145,121 @@ onMounted(() => {
         );
       }
 
-      // Build timeline: each step dismisses the previous and reveals itself
-      const tl = gsap.timeline({ paused: true });
-      steps.forEach((step, i) => {
-        if (i > 0) {
-          tl.to(steps[i - 1]!, {
-            opacity: 0,
-            y: -28,
-            duration: 0.3,
-            ease: 'power2.in',
-          });
-        }
-        tl.fromTo(
-          step,
-          { y: 36, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.3, ease: 'power3.out' },
-          i === 0 ? '>' : '>-0.05',
-        );
-        // Hold this step in view before advancing
-        if (i < steps.length - 1) tl.to({}, { duration: 1 });
-      });
+      expMm = gsap.matchMedia();
 
-      // Pin + scrub drives the timeline
-      ScrollTrigger.create({
-        trigger: experienceRef.value,
-        pin: true,
-        anticipatePin: 1,
-        start: 'top top',
-        end: `+=${steps.length * SCROLL_PER_STEP}`,
-        scrub: 1,
-        animation: tl,
-        onUpdate: (self) => {
-          const idx = Math.min(
-            Math.floor(self.progress * steps.length),
-            steps.length - 1,
+      // ── Mobile: simple stacked scroll-reveals (no pin, no absolute overlap) ──
+      expMm.add('(max-width: 767px)', () => {
+        steps.forEach((step) => {
+          gsap.fromTo(
+            step,
+            { opacity: 0, y: 24 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.7,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: step,
+                start: 'top 85%',
+                toggleActions: 'play none none reverse',
+              },
+            },
           );
-          if (idx === currentStep) return;
-          currentStep = idx;
-          if (counterEl)
-            counterEl.textContent = String(idx + 1).padStart(2, '0');
-          dots.forEach((dot, di) => {
-            gsap.to(dot, {
-              width: di <= idx ? '2rem' : '0.4rem',
-              backgroundColor:
-                di <= idx
-                  ? 'var(--color-clay, #b5775a)'
-                  : 'rgba(180,160,140,0.3)',
-              duration: 0.3,
-              overwrite: true,
-            });
-          });
-        },
+        });
       });
 
-      // Subtle parallax on the heading text while pinned
-      const heading = experienceRef.value.querySelector<HTMLElement>(
-        '.experience-heading',
-      );
-      if (heading) {
-        gsap.to(heading, {
-          y: -24,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: experienceRef.value,
-            start: 'top top',
-            end: `+=${steps.length * SCROLL_PER_STEP}`,
-            scrub: 1.2,
+      // ── Desktop: pinned scrubbed timeline ────────────────────────────────
+      expMm.add('(min-width: 768px)', () => {
+        const SCROLL_PER_STEP = 320;
+        let currentStep = -1;
+
+        gsap.set(steps, { opacity: 0, y: 36 });
+
+        const tl = gsap.timeline({ paused: true });
+        steps.forEach((step, i) => {
+          const img = step.querySelector('.step-image');
+
+          if (i > 0) {
+            tl.to(steps[i - 1]!, {
+              opacity: 0,
+              y: -28,
+              duration: 0.3,
+              ease: 'power2.in',
+            });
+          }
+
+          tl.fromTo(
+            step,
+            { y: 36, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.3,
+              ease: 'power3.out',
+              force3D: true,
+            },
+            i === 0 ? '>' : '>-0.05',
+          );
+
+          if (img) {
+            tl.fromTo(
+              img,
+              { scale: 1.15 },
+              { scale: 1, duration: 1.2, ease: 'power2.out', force3D: true },
+              '<',
+            );
+          }
+
+          if (i < steps.length - 1) tl.to({}, { duration: 1.5 });
+        });
+
+        ScrollTrigger.create({
+          trigger: experienceRef.value,
+          pin: true,
+          anticipatePin: 1,
+          start: 'top top',
+          end: `+=${steps.length * SCROLL_PER_STEP}`,
+          scrub: 1,
+          animation: tl,
+          onUpdate: (self) => {
+            const idx = Math.min(
+              Math.floor(self.progress * steps.length),
+              steps.length - 1,
+            );
+            if (idx === currentStep) return;
+            currentStep = idx;
+            if (counterEl)
+              counterEl.textContent = String(idx + 1).padStart(2, '0');
+            dots.forEach((dot, di) => {
+              gsap.to(dot, {
+                width: di <= idx ? '2rem' : '0.4rem',
+                backgroundColor:
+                  di <= idx
+                    ? 'var(--color-clay, #b5775a)'
+                    : 'rgba(180,160,140,0.3)',
+                duration: 0.3,
+                overwrite: true,
+              });
+            });
           },
         });
-      }
+
+        const heading = experienceRef.value!.querySelector<HTMLElement>(
+          '.experience-heading',
+        );
+        if (heading) {
+          gsap.to(heading, {
+            y: -24,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: experienceRef.value,
+              start: 'top top',
+              end: `+=${steps.length * SCROLL_PER_STEP}`,
+              scrub: 1.2,
+            },
+          });
+        }
+      });
     }
 
     // ── Included — editorial typographic list ────────────────────────
@@ -1112,20 +1369,21 @@ onMounted(() => {
       );
 
       pricingRef.value
-        .querySelectorAll<HTMLElement>('.pricing-item')
-        .forEach((item, i) => {
+        .querySelectorAll<HTMLElement>('.pricing-card-wrap')
+        .forEach((card, i) => {
           gsap.fromTo(
-            item,
-            { opacity: 0, y: 18 },
+            card,
+            { opacity: 0, y: 40 },
             {
               opacity: 1,
               y: 0,
-              duration: 0.75,
-              ease: 'power3.out',
-              delay: i * 0.1,
+              duration: 1.2,
+              ease: 'power4.out',
+              delay: i * 0.15,
+              force3D: true, // <--- Add this!
               scrollTrigger: {
-                trigger: pricingRef.value,
-                start: 'top 68%',
+                trigger: card,
+                start: 'top 85%',
                 toggleActions: 'play none none reverse',
               },
             },
@@ -1213,6 +1471,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   ctx?.revert();
+  expMm?.revert();
 });
 
 // ── Head ─────────────────────────────────────────────────────────────
@@ -1224,3 +1483,19 @@ useHead({
   ),
 });
 </script>
+
+<style scoped>
+.perspective {
+  perspective: 1200px;
+}
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+</style>

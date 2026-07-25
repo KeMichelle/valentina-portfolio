@@ -3,21 +3,24 @@
     <!-- Fixed Header Navigation -->
     <header
       ref="headerEl"
-      class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6 transition-all duration-500"
-      :class="scrolled ? 'header-frosted' : 'bg-transparent'"
+      class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-6 md:px-8 py-6 transition-all duration-500"
+      :class="
+        scrolled && !isMobileMenuOpen ? 'header-frosted' : 'bg-transparent'
+      "
     >
-      <nav aria-label="Home">
+      <nav aria-label="Home" class="relative z-50">
         <NuxtLink
           to="/"
           class="font-serif text-charcoal text-sm tracking-widest2 uppercase nav-wordmark"
+          @click="isMobileMenuOpen = false"
         >
           Valentina
         </NuxtLink>
       </nav>
 
-      <!-- Main nav — handles smart hash scrolling on home page -->
+      <!-- Main nav — Desktop Only (hidden on mobile) -->
       <nav
-        class="flex items-center gap-8"
+        class="hidden md:flex items-center gap-8"
         aria-label="Main navigation"
         @click.capture="handleNavClick"
       >
@@ -26,7 +29,44 @@
         <NuxtLink to="/#faq" class="nav-link">FAQ</NuxtLink>
         <NuxtLink to="/contact" class="nav-link">Contatto</NuxtLink>
       </nav>
+
+      <!-- Hamburger Button — Mobile Only -->
+      <button
+        class="md:hidden relative z-50 flex flex-col items-center justify-center w-8 h-8 gap-1.5 focus:outline-none"
+        @click="isMobileMenuOpen = !isMobileMenuOpen"
+        aria-label="Toggle mobile menu"
+      >
+        <span
+          class="block w-6 h-px bg-charcoal transition-transform duration-300 origin-center"
+          :class="isMobileMenuOpen ? 'rotate-45 translate-y-[7px]' : ''"
+        />
+        <span
+          class="block w-6 h-px bg-charcoal transition-opacity duration-300"
+          :class="isMobileMenuOpen ? 'opacity-0' : 'opacity-100'"
+        />
+        <span
+          class="block w-6 h-px bg-charcoal transition-transform duration-300 origin-center"
+          :class="isMobileMenuOpen ? '-rotate-45 -translate-y-[7px]' : ''"
+        />
+      </button>
     </header>
+
+    <!-- Mobile Full-Screen Overlay Menu -->
+    <div
+      class="fixed inset-0 bg-cream z-40 flex flex-col items-center justify-center transition-transform duration-500 ease-in-out md:hidden"
+      :class="isMobileMenuOpen ? 'translate-y-0' : '-translate-y-full'"
+    >
+      <nav
+        class="flex flex-col items-center gap-10"
+        aria-label="Mobile navigation"
+        @click.capture="handleNavClick"
+      >
+        <NuxtLink to="/#work" class="nav-link text-lg">Servizi</NuxtLink>
+        <NuxtLink to="/#about" class="nav-link text-lg">About</NuxtLink>
+        <NuxtLink to="/#faq" class="nav-link text-lg">FAQ</NuxtLink>
+        <NuxtLink to="/contact" class="nav-link text-lg">Contatto</NuxtLink>
+      </nav>
+    </div>
 
     <!-- Page Content -->
     <main class="relative z-10">
@@ -34,10 +74,12 @@
     </main>
   </div>
 </template>
-
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
+
 const route = useRoute();
 const scrolled = ref(false);
+const isMobileMenuOpen = ref(false); // <-- ADD THIS
 
 // ── Frosted-glass header on scroll ──────────────────────────────
 onMounted(() => {
@@ -54,6 +96,9 @@ onMounted(() => {
 function handleNavClick(e: MouseEvent) {
   const link = (e.target as HTMLElement).closest('a');
   if (!link) return;
+
+  // Close the mobile menu whenever a link is clicked
+  isMobileMenuOpen.value = false;
 
   const href = link.getAttribute('href');
   if (!href?.startsWith('/#')) return; // not a hash link — let router handle it

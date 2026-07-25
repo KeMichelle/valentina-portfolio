@@ -33,7 +33,7 @@
           v-for="service in services"
           :key="service.id"
           :to="`/services/${service.slug}`"
-          class="grid-card group relative aspect-[4/5] overflow-hidden transition-transform duration-500 ease-out hover:-translate-y-1"
+          class="grid-card group relative aspect-[16/9] sm:aspect-[4/5] overflow-hidden transition-transform duration-500 ease-out hover:-translate-y-1"
         >
           <NuxtImg
             :src="service.cover"
@@ -45,28 +45,34 @@
             class="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-105"
           />
 
+          <!-- Slightly darker gradient on mobile to ensure text legibility on landscape crops -->
           <div
-            class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent transition duration-500 group-hover:from-black/60"
+            class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 sm:from-black/70 sm:via-black/20 to-transparent transition duration-500 group-hover:from-black/60"
           />
 
-          <div class="absolute inset-x-0 bottom-0 p-7">
+          <!-- Reduced padding on mobile (p-5 instead of p-7) -->
+          <div class="absolute inset-x-0 bottom-0 p-5 sm:p-7">
             <p
-              class="text-[11px] uppercase tracking-[0.3em] text-stone-300 mb-2"
+              class="text-[10px] sm:text-[11px] uppercase tracking-[0.3em] text-stone-300 mb-1 sm:mb-2"
             >
               {{ service.category }}
             </p>
+
             <h3
               class="font-serif text-white leading-none"
-              style="font-size: clamp(1.6rem, 2vw, 2.2rem)"
+              style="font-size: clamp(1.4rem, 2vw, 2.2rem)"
             >
               {{ service.title }}
             </h3>
-            <div class="flex items-center justify-between mt-5">
-              <span class="font-serif text-stone-200 text-lg">
+
+            <div class="flex items-center justify-between mt-3 sm:mt-5">
+              <span class="font-serif text-stone-200 text-base sm:text-lg">
                 {{ service.pricing[0]?.price }}
               </span>
+
+              <!-- Always visible on mobile, hover-only on sm+ -->
               <span
-                class="uppercase tracking-[0.25em] text-xs text-white opacity-0 translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0"
+                class="uppercase tracking-[0.25em] text-[10px] sm:text-xs text-white opacity-100 translate-x-0 sm:opacity-0 sm:translate-x-2 transition-all duration-300 sm:group-hover:opacity-100 sm:group-hover:translate-x-0"
               >
                 Scopri →
               </span>

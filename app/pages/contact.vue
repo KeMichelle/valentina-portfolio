@@ -10,7 +10,7 @@
         class="absolute inset-0 scale-[1.12] will-change-transform"
       >
         <NuxtImg
-          src="/images/about-03.jpg"
+          src="/images/about-01.jpg"
           format="webp"
           width="1920"
           height="1280"
@@ -26,16 +26,6 @@
         aria-hidden="true"
       />
 
-      <!-- Back link -->
-      <NuxtLink
-        to="/#work"
-        ref="heroBack"
-        class="absolute top-8 left-8 lg:top-12 lg:left-14 font-sans text-xs tracking-[0.3em] uppercase text-white/60 hover:text-white transition-colors duration-400 z-20"
-        style="opacity: 0"
-      >
-        ← Torna ai servizi
-      </NuxtLink>
-
       <!-- Eyebrow -->
       <p
         ref="heroEyebrow"
@@ -48,7 +38,7 @@
 
       <!-- Headline -->
       <div
-        class="absolute bottom-16 lg:bottom-20 left-8 lg:left-14 right-8 z-20"
+        class="absolute bottom-24 lg:bottom-20 left-8 lg:left-14 right-8 z-20"
       >
         <h1
           ref="heroHeadline"
@@ -66,7 +56,7 @@
       <!-- Scroll indicator -->
       <div
         ref="heroScroll"
-        class="absolute bottom-8 right-8 lg:right-14 flex flex-col items-center gap-3 z-20"
+        class="absolute bottom-16 lg:bottom-8 right-8 lg:right-14 flex flex-col items-center gap-3 z-20"
         style="opacity: 0"
         aria-hidden="true"
       >
@@ -81,7 +71,7 @@
     <!-- ═══════════════════════════════════════════════════════
          2. EDITORIAL INTRODUCTION
     ══════════════════════════════════════════════════════════ -->
-    <section class="w-full py-36 lg:py-52" style="background-color: #f5f2ec">
+    <section class="w-full py-16 lg:py-52" style="background-color: #f5f2ec">
       <div class="mx-auto max-w-screen-xl px-6 lg:px-14">
         <div class="grid grid-cols-12 gap-x-6">
           <div
@@ -101,11 +91,11 @@
               una&nbsp;<em>connessione</em>.
             </p>
             <div
-              class="fade-up mt-14 lg:mt-16 h-px bg-stone-200 w-24"
+              class="fade-up mt-10 lg:mt-16 h-px bg-stone-200 w-24"
               aria-hidden="true"
             />
             <p
-              class="fade-up mt-14 font-sans text-base lg:text-lg text-stone-500 font-light leading-loose max-w-xl"
+              class="fade-up mt-10 lg:mt-14 font-sans text-base lg:text-lg text-stone-500 font-light leading-loose max-w-xl"
             >
               Scrivimi cosa stai vivendo, cosa vuoi ricordare, o semplicemente
               come ti senti in questo momento. La tua storia merita di essere
@@ -119,9 +109,9 @@
     <!-- ═══════════════════════════════════════════════════════
          3. CONTACT SECTION — portrait + form
     ══════════════════════════════════════════════════════════ -->
-    <section class="w-full pb-36 lg:pb-52" style="background-color: #f5f2ec">
+    <section class="w-full pb-16 lg:pb-52" style="background-color: #f5f2ec">
       <div class="mx-auto max-w-screen-xl px-6 lg:px-14">
-        <div class="grid grid-cols-12 gap-x-6 gap-y-20 items-start">
+        <div class="grid grid-cols-12 gap-x-6 gap-y-12 lg:gap-y-20 items-start">
           <!-- LEFT: Portrait + info -->
           <aside
             class="col-span-12 lg:col-span-4 xl:col-span-4 lg:sticky lg:top-28"
@@ -153,14 +143,6 @@
                   Fotografa — Bergamo
                 </p>
               </div>
-
-              <p
-                class="font-sans text-sm text-stone-500 font-light leading-relaxed"
-              >
-                Lavoro con la luce naturale, il silenzio e la presenza. Ogni
-                servizio è pensato su misura per te, con cura e rispetto per il
-                tuo momento.
-              </p>
 
               <div class="space-y-6 pt-2">
                 <div>
@@ -221,7 +203,7 @@
           <div
             class="col-span-12 lg:col-start-6 lg:col-span-7 xl:col-start-6 xl:col-span-7"
           >
-            <div class="fade-up mb-14">
+            <div class="fade-up mb-10 lg:mb-14">
               <p
                 class="font-sans text-xs uppercase tracking-[0.3em] text-stone-400 mb-6"
               >
@@ -236,12 +218,12 @@
             </div>
 
             <form
-              class="fade-up space-y-12"
+              class="fade-up space-y-10 lg:space-y-12"
               novalidate
               @submit.prevent="handleSubmit"
             >
               <!-- Name + Email -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-10">
                 <div class="field-group">
                   <label for="name" class="field-label">Nome *</label>
                   <input
@@ -271,7 +253,7 @@
               </div>
 
               <!-- Phone + Service -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 sm:gap-10">
                 <div class="field-group">
                   <label for="phone" class="field-label">Telefono</label>
                   <input
@@ -324,7 +306,7 @@
                 <button
                   type="submit"
                   :disabled="submitting"
-                  class="contact-btn inline-block font-sans text-xs uppercase tracking-[0.3em] text-[#262624] border border-[#262624] px-14 py-5 hover:bg-[#262624] hover:text-[#F5F2EC] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500"
+                  class="contact-btn w-full sm:w-auto inline-block text-center font-sans text-xs uppercase tracking-[0.3em] text-[#262624] border border-[#262624] px-14 py-5 hover:bg-[#262624] hover:text-[#F5F2EC] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-500"
                 >
                   {{ submitting ? 'Invio in corso...' : 'Invia messaggio' }}
                 </button>
@@ -354,16 +336,16 @@
          4. TESTIMONIALS
     ══════════════════════════════════════════════════════════ -->
     <section
-      class="w-full py-36 lg:py-52 overflow-hidden"
+      class="w-full py-16 lg:py-52 overflow-hidden"
       style="background-color: #262624"
     >
       <div class="mx-auto max-w-screen-xl px-6 lg:px-14">
         <p
-          class="fade-up font-sans text-xs uppercase tracking-[0.3em] text-stone-500 mb-16 lg:mb-24"
+          class="fade-up font-sans text-xs uppercase tracking-[0.3em] text-stone-500 mb-10 lg:mb-24"
         >
           Le loro parole
         </p>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-16 lg:gap-10">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
           <blockquote
             v-for="(t, i) in testimonials"
             :key="i"
@@ -400,7 +382,7 @@
     <!-- ═══════════════════════════════════════════════════════
          5. FAQ
     ══════════════════════════════════════════════════════════ -->
-    <section class="w-full py-36 lg:py-52" style="background-color: #f5f2ec">
+    <section class="w-full py-16 lg:py-52" style="background-color: #f5f2ec">
       <div class="mx-auto max-w-screen-xl px-6 lg:px-14">
         <div class="grid grid-cols-12 gap-x-6">
           <div class="col-span-12 lg:col-span-4 mb-16 lg:mb-0">

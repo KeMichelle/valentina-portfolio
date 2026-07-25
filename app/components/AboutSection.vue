@@ -5,10 +5,6 @@
     class="relative z-10 w-full overflow-visible py-40 lg:py-56"
     style="background-color: #f5f2ec"
   >
-    <!--
-      Flowers: mid-left, emerge behind the quote block as you scroll into Row 2.
-      Lower opacity lets them read as environment, not ornament.
-    -->
     <div
       ref="flowerContainer"
       class="absolute left-[-3vw] top-[55%] h-[70vh] w-[26vw] max-w-[360px] z-0 pointer-events-none text-[#7A7E63]/20"
@@ -17,12 +13,6 @@
     </div>
 
     <div class="mx-auto max-w-screen-xl px-6 lg:px-16 relative z-10">
-      <!-- ── HEADER ──────────────────────────────────────────────────
-           "Chapter I" floats absolute-left as a tiny counter-label.
-           The H2 is indented 14% — breaking the full-bleed grid and
-           creating a left margin that lets the title breathe.
-           The italic last line adds typographic tension.
-      -->
       <div class="relative mb-36 lg:mb-48">
         <span
           class="absolute left-0 top-1 font-sans text-[10px] uppercase tracking-[0.4em] text-stone-400"
@@ -39,24 +29,19 @@
           <em class="italic">si&nbsp;sente.</em>
         </h2>
 
-        <!-- Thin vertical accent at the indent point -->
         <div
           class="absolute left-[14%] w-px bg-stone-300/70"
           style="bottom: -1.5rem; height: 2rem"
         />
       </div>
 
-      <!-- ── ROW 1: Image 1 (left anchor) + Right composition ────────
-           Image 1 anchors the left side as a tall 3:4 portrait.
-           Image 2 escapes 7vw upward into the heading margin.
-           Bio paragraphs 1-3 float in the right column below Image 2.
-           Para 3 is the pivot sentence — rendered italic to mark the turn.
-      -->
-      <div class="grid grid-cols-12 gap-x-4 lg:gap-x-6 items-start">
-        <!-- Image 1 — tall portrait (3:4) -->
+      <!-- ── ROW 1: Mobile Vertical / Desktop Grid ──────── -->
+      <div
+        class="flex flex-col lg:grid lg:grid-cols-12 gap-y-12 lg:gap-x-6 items-start"
+      >
         <div
           ref="imgWrap1"
-          class="img-reveal-wrap col-start-1 col-span-5 relative z-10 will-change-transform"
+          class="img-reveal-wrap w-full lg:col-start-1 lg:col-span-5 relative z-10 will-change-transform"
         >
           <NuxtImg
             ref="img1"
@@ -70,14 +55,10 @@
           />
         </div>
 
-        <!-- Right column: Image 2 escapes upward + bio paragraphs 1-3 below -->
-        <div class="col-start-6 col-span-7 relative">
-          <!--
-            Image 2 outer positioning wrapper.
-            top: -7vw pulls it above the grid row into the heading margin.
-            Pure positioning shell — GSAP owns the inner imgWrap2.
-          -->
-          <div class="absolute z-30" style="right: 0; top: -7vw; width: 46%">
+        <div class="w-full lg:col-start-6 lg:col-span-7 relative flex flex-col">
+          <div
+            class="relative lg:absolute z-30 self-end w-3/4 sm:w-1/2 lg:w-[46%] mb-8 lg:mb-0 lg:-top-[7vw] lg:right-0"
+          >
             <div ref="imgWrap2" class="img-reveal-wrap will-change-transform">
               <NuxtImg
                 ref="img2"
@@ -92,17 +73,9 @@
             </div>
           </div>
 
-          <!--
-            Bio paragraphs 1-3.
-            padding-top: 42% clears Image 2 (reduced from 52% — the longer
-            text naturally fills the column, so less dead space is needed).
-            padding-right: 20% keeps the column deliberately narrow.
-            Para 3 is the pivot sentence and gets italic treatment.
-          -->
           <div
             ref="bioEl"
-            class="relative z-20 flex flex-col gap-8"
-            style="padding-top: 42%; padding-right: 20%"
+            class="relative z-20 flex flex-col gap-6 lg:gap-8 lg:pt-[10%] lg:pr-[50%] xl:pr-[48%]"
           >
             <p
               class="font-sans text-sm lg:text-[15px] leading-[2.1] text-stone-600 font-light"
@@ -127,23 +100,14 @@
         </div>
       </div>
 
-      <!-- ── ROW 2: Bio 4-5 + Quote + Image 3 ─────────────────────────
-           margin-top: -7vw overlaps Row 1 so Image 3 shares the same visual
-           plane as Image 1 — no hard compositional break.
-           Left side: paragraphs 4-5 as body text, then para 6 as the
-           editorial statement quote (more personal than a placeholder line).
-           Image 3 breaks the right boundary and carries a 0.5° rotation.
-      -->
+      <!-- ── ROW 2: Mobile Reverse Stack / Desktop Grid ──────── -->
       <div
-        class="grid grid-cols-12 gap-x-4 lg:gap-x-6 items-start"
-        style="margin-top: -7vw"
+        class="flex flex-col-reverse lg:grid lg:grid-cols-12 gap-y-16 lg:gap-x-6 items-start mt-20 lg:-mt-[7vw]"
       >
-        <!-- Left block: bio paragraphs 4-5 + editorial quote (para 6) -->
         <div
-          class="col-start-1 col-span-5 relative z-20 flex flex-col gap-10"
-          style="padding-top: 12vw"
+          class="w-full lg:col-start-1 lg:col-span-5 relative z-20 flex flex-col gap-10 lg:pt-[12vw]"
         >
-          <div ref="bioEl2" class="flex flex-col gap-8">
+          <div ref="bioEl2" class="flex flex-col gap-6 lg:gap-8">
             <p
               class="font-sans text-sm lg:text-[15px] leading-[2.1] text-stone-600 font-light"
             >
@@ -159,10 +123,6 @@
             </p>
           </div>
 
-          <!--
-            Para 6 becomes the editorial quote — it's the most quotable line
-            in the bio and earns the large-italic treatment.
-          -->
           <blockquote
             ref="quoteEl"
             class="font-serif italic text-stone-500"
@@ -176,10 +136,8 @@
           </blockquote>
         </div>
 
-        <!-- Image 3 outer wrapper — breaks right edge, slight tilt -->
         <div
-          class="col-start-7 col-span-6 relative z-10"
-          style="transform: translateX(4%) rotate(0.5deg)"
+          class="w-full lg:col-start-7 lg:col-span-6 relative z-10 lg:translate-x-[4%] lg:rotate-[0.5deg]"
         >
           <div ref="imgWrap3" class="img-reveal-wrap will-change-transform">
             <NuxtImg

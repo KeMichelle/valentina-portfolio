@@ -1,7 +1,7 @@
 <template>
   <section
     id="hero"
-    class="relative z-10 h-screen w-full overflow-hidden bg-charcoal"
+    class="relative z-10 w-full overflow-hidden bg-charcoal h-[100dvh]"
   >
     <video
       ref="bgVideo"
@@ -24,13 +24,12 @@
     />
 
     <div
-      class="absolute inset-0 flex items-center justify-center px-6 text-center"
+      class="absolute inset-0 flex items-center justify-center px-8 md:px-12 text-center"
     >
-      <!-- opacity:0 prevents FOUC; GSAP animates it in on mount -->
       <h1
         ref="headline"
         class="font-serif text-white leading-none tracking-tight"
-        style="font-size: clamp(3.5rem, 10vw, 10rem); opacity: 0"
+        style="font-size: clamp(3rem, 10vw, 10rem); opacity: 0"
       >
         Where Light<br />Tells Stories
       </h1>

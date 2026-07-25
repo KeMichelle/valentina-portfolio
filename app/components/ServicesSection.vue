@@ -23,54 +23,57 @@
       </p>
     </div>
 
-    <!-- Sticky card stack — 3 cards × 100vh each + exit space -->
-    <div class="relative" style="height: calc(300vh + 100vh)">
+    <!-- Unified sticky stack — single scroll axis (Lenis / window) on all screen sizes -->
+    <div class="services-stack relative h-[calc(300dvh+100dvh)]">
       <div
         v-for="(service, i) in featuredServices"
         :key="service.id"
-        class="sticky top-0 h-screen w-full overflow-hidden"
+        class="service-card sticky top-0 h-[100dvh] w-full overflow-hidden"
         :style="`z-index: ${i + 1};`"
       >
         <NuxtLink
           :to="`/services/${service.slug}`"
           class="group block relative w-full h-full"
         >
+          <!-- Using object-cover automatically resizes the image to fit the vertical container on phone -->
           <NuxtImg
             :src="service.cover"
             format="webp"
             width="1920"
             height="1080"
             :alt="service.title"
-            class="service-img absolute inset-0 w-full h-full object-cover will-change-transform"
+            class="service-img absolute inset-0 w-full h-full object-cover lg:will-change-transform"
             loading="lazy"
           />
 
+          <!-- Gradient overlay -->
           <div class="absolute inset-0 bg-black/40" />
 
+          <!-- Content padding -->
           <div
-            class="absolute inset-0 flex flex-col justify-end px-10 pb-16 lg:px-20 lg:pb-20"
+            class="absolute inset-0 flex flex-col justify-end px-8 pb-12 md:px-12 md:pb-16 lg:px-20 lg:pb-20"
           >
             <p
-              class="service-tag font-sans text-xs uppercase tracking-[0.3em] text-stone-300 mb-3"
+              class="service-tag font-sans text-xs uppercase tracking-[0.3em] text-stone-300 mb-2 md:mb-3"
             >
               {{ service.heroTag }}
             </p>
 
             <h3
               class="service-title font-serif text-white leading-none tracking-tight"
-              style="font-size: clamp(2.2rem, 4vw, 5.5rem)"
+              style="font-size: clamp(2.2rem, 8vw, 5.5rem)"
             >
               {{ service.title }}
             </h3>
 
             <p
-              class="service-text mt-4 font-sans text-sm text-stone-300 font-light max-w-md leading-relaxed"
+              class="service-text mt-3 md:mt-4 font-sans text-sm text-stone-300 font-light max-w-md leading-relaxed"
             >
               {{ service.excerpt }}
             </p>
 
             <span
-              class="scopri-btn magnetic mt-8 self-start font-sans text-xs uppercase tracking-[0.25em] text-white border-b border-white/50 pb-0.5"
+              class="scopri-btn lg:magnetic mt-6 md:mt-8 self-start font-sans text-xs uppercase tracking-[0.25em] text-white border-b border-white/50 pb-0.5"
             >
               Scopri
             </span>
@@ -82,6 +85,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useServices } from '~/composables/useServices';
@@ -92,15 +96,16 @@ const { featuredServices } = useServices();
 const section = ref<HTMLElement | null>(null);
 const sectionTitle = ref<HTMLElement | null>(null);
 
-let ctx: gsap.Context;
+let mm: gsap.MatchMedia;
 
 onMounted(() => {
   if (!section.value) return;
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  mm = gsap.matchMedia();
 
-  ctx = gsap.context(() => {
-    // ── SECTION TITLE REVEAL ──────────────────────────────────
+  // ── 1. GLOBAL TITLE REVEAL (All devices) ──────────────────────────
+  mm.add('all', () => {
     if (sectionTitle.value) {
       gsap.fromTo(
         sectionTitle.value,
@@ -118,43 +123,40 @@ onMounted(() => {
         },
       );
     }
+  });
 
-    // ── CARDS ────────────────────────────────────────────────
-    const cards = gsap.utils.toArray<HTMLElement>(
-      section.value!.querySelectorAll('.sticky.top-0.h-screen'),
-    );
+  if (reduced) return;
 
-    cards.forEach((card, i) => {
+  // ── 2. DESKTOP ANIMATIONS (Heavy Parallax & Scrub) ────────────────
+  mm.add('(min-width: 1024px)', () => {
+    const cards = gsap.utils.toArray<HTMLElement>('.service-card');
+
+    cards.forEach((card) => {
       const img = card.querySelector('.service-img');
       const title = card.querySelector('.service-title');
       const text = card.querySelector('.service-text');
       const tag = card.querySelector('.service-tag');
 
-      // ─────────────────────────────
-      // PARALLAX + SCALE IMMAGINE
-      // ─────────────────────────────
-      gsap.fromTo(
-        img,
-        {
-          scale: 1.08,
-          y: -30,
-        },
-        {
-          scale: 1,
-          y: 0,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
+      // Image Parallax
+      if (img) {
+        gsap.fromTo(
+          img,
+          { scale: 1.08, y: -30 },
+          {
+            scale: 1,
+            y: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: card,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true,
+            },
           },
-        },
-      );
+        );
+      }
 
-      // ─────────────────────────────
-      // ANIMAZIONE TESTO
-      // ─────────────────────────────
+      // Text Timeline
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: card,
@@ -164,30 +166,29 @@ onMounted(() => {
         },
       });
 
-      tl.fromTo(
-        tag,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
-      )
-        .fromTo(
-          title,
-          { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
-          '-=0.3',
+      if (tag && title && text) {
+        tl.fromTo(
+          tag,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' },
         )
-        .fromTo(
-          text,
-          { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
-          '-=0.4',
-        );
+          .fromTo(
+            title,
+            { opacity: 0, y: 40 },
+            { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
+            '-=0.3',
+          )
+          .fromTo(
+            text,
+            { opacity: 0, y: 30 },
+            { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' },
+            '-=0.4',
+          );
+      }
     });
-  });
 
-  // ── MAGNETIC "Scopri" buttons ─────────────────────────────────
-  // Each "Scopri" label gently drifts toward the cursor, snaps back on leave
-  if (!reduced) {
-    const btns = section.value.querySelectorAll<HTMLElement>('.scopri-btn');
+    // Magnetic Buttons (Desktop Only)
+    const btns = section.value!.querySelectorAll<HTMLElement>('.scopri-btn');
     btns.forEach((btn) => {
       btn.addEventListener('mousemove', (e) => {
         const r = btn.getBoundingClientRect();
@@ -209,8 +210,57 @@ onMounted(() => {
         });
       });
     });
-  }
+  });
+
+  // ── 3. MOBILE ANIMATIONS (Lightweight Text Fade-up + GSAP Snap) ──────────
+  mm.add('(max-width: 1023px)', () => {
+    const cards = gsap.utils.toArray<HTMLElement>('.service-card');
+    const stack = section.value!.querySelector<HTMLElement>('.services-stack');
+
+    // GSAP snap — single scroll axis, no nested containers, works with Lenis
+    if (stack && cards.length > 1) {
+      ScrollTrigger.create({
+        trigger: stack,
+        start: 'top top',
+        end: `+=${(cards.length - 1) * 100}%`,
+        snap: {
+          snapTo: 1 / (cards.length - 1),
+          duration: { min: 0.2, max: 0.5 },
+          ease: 'power2.inOut',
+          delay: 0.05,
+        },
+      });
+    }
+
+    cards.forEach((card) => {
+      // Select the inner text elements instead of the whole card
+      const title = card.querySelector('.service-title');
+      const text = card.querySelector('.service-text');
+      const tag = card.querySelector('.service-tag');
+      const btn = card.querySelector('.scopri-btn');
+
+      gsap.fromTo(
+        [tag, title, text, btn],
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.1, // Fades them in one after the other
+          ease: 'power3.out',
+          force3D: true,
+          scrollTrigger: {
+            trigger: card,
+            start: 'top 60%',
+            toggleActions: 'play none none reverse',
+          },
+        },
+      );
+    });
+  });
 });
 
-onBeforeUnmount(() => ctx?.revert());
+onBeforeUnmount(() => {
+  mm?.revert();
+});
 </script>
