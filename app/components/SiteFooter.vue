@@ -5,27 +5,22 @@
       class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-8 flex-shrink-0 border-b border-[#333330]"
     >
       <a
-        v-for="(ig, i) in instagramImages"
-        :key="i"
-        href="https://www.instagram.com/by.mothernature.fotografie/"
+        v-for="(ig, i) in igPosts"
+        :key="ig.id"
+        :href="ig.permalink"
         target="_blank"
         rel="noopener noreferrer"
         class="relative overflow-hidden aspect-square block group"
-        :aria-label="`Visita @by.mothernature.fotografie su Instagram`"
+        :aria-label="`Visita @by.mothernature.fotografie su Instagram — post ${i + 1}`"
       >
-        <div
-          class="absolute inset-0"
-          :style="`background-color: ${ig.bg};`"
-          aria-hidden="true"
-        />
-        <NuxtImg
+        <div class="absolute inset-0 bg-[#7A7E63]" aria-hidden="true" />
+        <img
           :src="ig.src"
-          format="webp"
-          width="300"
-          height="300"
           :alt="`@by.mothernature.fotografie — post ${i + 1}`"
           class="relative w-full h-full object-cover opacity-60 group-hover:opacity-85 transition-opacity duration-500"
           loading="lazy"
+          width="300"
+          height="300"
         />
       </a>
     </div>
@@ -111,6 +106,10 @@
 const route = useRoute();
 const year = new Date().getFullYear();
 
+const { data: igPosts } = await useFetch('/api/instagram', {
+  default: () => [] as Array<{ id: string; src: string; permalink: string }>,
+});
+
 // Smart scroll — same logic as header nav: intercept hash links on home page
 function handleNavClick(e: MouseEvent) {
   const link = (e.target as HTMLElement).closest('a');
@@ -128,17 +127,6 @@ function handleNavClick(e: MouseEvent) {
     ? lenis.scrollTo(el, { offset: -88, duration: 1.4 })
     : el.scrollIntoView({ behavior: 'smooth' });
 }
-
-const instagramImages = [
-  { src: '/images/ig-01.jpg', bg: '#8C7B6B' },
-  { src: '/images/ig-02.jpg', bg: '#7A7E63' },
-  { src: '/images/ig-03.jpg', bg: '#6B7C7A' },
-  { src: '/images/ig-04.jpg', bg: '#7E6B6B' },
-  { src: '/images/ig-05.jpg', bg: '#8C7B6B' },
-  { src: '/images/ig-06.jpg', bg: '#7A7E63' },
-  { src: '/images/ig-07.jpg', bg: '#6B7C7A' },
-  { src: '/images/ig-08.jpg', bg: '#7E6B6B' },
-];
 </script>
 
 <style scoped>
