@@ -321,7 +321,7 @@
          4. TESTIMONIALS
     ══════════════════════════════════════════════════════════ -->
     <section
-      class="w-full py-16 lg:py-52 overflow-hidden"
+      class="testimonials-section w-full py-16 lg:py-52 overflow-hidden"
       style="background-color: #262624"
     >
       <div class="mx-auto max-w-screen-xl px-6 lg:px-14">
@@ -331,12 +331,7 @@
           Le loro parole
         </p>
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
-          <blockquote
-            v-for="(t, i) in testimonials"
-            :key="i"
-            class="fade-up"
-            :style="`transition-delay: ${i * 0.12}s`"
-          >
+          <blockquote v-for="(t, i) in testimonials" :key="i" class="fade-up">
             <span
               class="block font-serif text-stone-600 leading-none select-none mb-6"
               style="font-size: 5rem; line-height: 0.6"
@@ -367,7 +362,10 @@
     <!-- ═══════════════════════════════════════════════════════
          5. FAQ
     ══════════════════════════════════════════════════════════ -->
-    <section class="w-full py-16 lg:py-52" style="background-color: #f5f2ec">
+    <section
+      class="faq-section w-full py-16 lg:py-52"
+      style="background-color: #f5f2ec"
+    >
       <div class="mx-auto max-w-screen-xl px-6 lg:px-14">
         <div class="grid grid-cols-12 gap-x-6">
           <div class="col-span-12 lg:col-span-4 mb-16 lg:mb-0">
@@ -389,7 +387,6 @@
                 v-for="(item, i) in faqItems"
                 :key="i"
                 class="fade-up border-b border-stone-200"
-                :style="`transition-delay: ${i * 0.06}s`"
               >
                 <dt>
                   <button
@@ -803,8 +800,10 @@ onMounted(() => {
         },
       );
 
-      // Generic fade-up reveals
+      // Generic fade-up reveals (skip section-scoped ones)
       document.querySelectorAll('.fade-up').forEach((el) => {
+        if (el.closest('.testimonials-section') || el.closest('.faq-section'))
+          return;
         gsap.fromTo(
           el,
           { opacity: 0, y: 36 },
@@ -816,6 +815,48 @@ onMounted(() => {
             scrollTrigger: {
               trigger: el,
               start: 'top 88%',
+              toggleActions: 'play none none none',
+            },
+          },
+        );
+      });
+
+      // Testimonials — individual tweens, all triggered by the section
+      document
+        .querySelectorAll('.testimonials-section .fade-up')
+        .forEach((el, i) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 36 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.9,
+              delay: i * 0.15,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: '.testimonials-section',
+                start: 'top 75%',
+                toggleActions: 'play none none none',
+              },
+            },
+          );
+        });
+
+      // FAQ — individual tweens, all triggered by the section
+      document.querySelectorAll('.faq-section .fade-up').forEach((el, i) => {
+        gsap.fromTo(
+          el,
+          { opacity: 0, y: 36 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.9,
+            delay: i * 0.1,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: '.faq-section',
+              start: 'top 75%',
               toggleActions: 'play none none none',
             },
           },
@@ -839,6 +880,12 @@ onUnmounted(() => ctx?.revert());
 </script>
 
 <style scoped>
+/* ── Fade-up initial state (GSAP reveals from here) ─────── */
+.fade-up {
+  opacity: 0;
+  transform: translateY(2.25rem);
+}
+
 /* ── Form fields ─────────────────────────────────────────── */
 .field-group {
   display: flex;

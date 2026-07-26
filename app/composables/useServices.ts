@@ -67,7 +67,7 @@ export const services: Service[] = [
     excerpt:
       'Mani piccole quanto un fiore. Sonni profondi come oceani. Le prime ore del mondo.',
     description:
-      'I primi giorni di vita sono irripetibili. Ogni piccolo dettaglio — le mani, i piedini, il respiro — merita di essere fermato nel tempo con delicatezza e amore.',
+      'I primi giorni di vita sono irripetibili. Ogni piccolo dettaglio — le mani, i piedini, il respiro; merita di essere fermato nel tempo con delicatezza e amore.',
     pricing: [
       {
         name: 'Newborn',
@@ -139,7 +139,7 @@ export const services: Service[] = [
     excerpt:
       'Il primo anno. La torta. La gioia pura di un bambino che scopre il mondo.',
     description:
-      'Una celebrazione piena di colore, dolcezza e risate. Lo smash cake è un momento iconico del primo anno di vita — da immortalare con immagini autentiche e vivaci.',
+      'Una celebrazione piena di colore, dolcezza e risate. Lo smash cake è un momento iconico del primo anno di vita; da immortalare con immagini autentiche e vivaci.',
     pricing: [
       {
         name: 'Smash Cake',
