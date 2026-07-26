@@ -75,9 +75,7 @@
             class="font-sans text-[10px] tracking-widest3 uppercase text-white/30 [writing-mode:vertical-rl]"
             >Scroll</span
           >
-          <div
-            class="w-px h-14 bg-white/15 relative overflow-hidden rounded-full"
-          >
+          <div class="w-px h-14 bg-white/15 relative overflow-hidden">
             <div
               class="scroll-indicator absolute top-0 left-0 w-full bg-white/50 rounded-full"
               style="height: 40%"
@@ -272,7 +270,7 @@
           <!-- Left label + heading -->
           <div
             ref="experienceLeft"
-            class="md:col-span-4 md:sticky md:top-32 self-start"
+            class="md:col-span-4 flex flex-col items-center md:items-start text-center md:text-left sticky top-10 self-start"
           >
             <p
               class="experience-label font-sans text-xs tracking-widest2 uppercase text-clay mb-5"
@@ -281,13 +279,13 @@
               Il processo
             </p>
             <h2
-              class="experience-heading font-serif font-light leading-editorial text-charcoal"
+              class="experience-heading mx-auto md:mx-0 max-w-sm leading-none"
               style="font-size: clamp(1.8rem, 5vw, 4.5rem); opacity: 0"
             >
               Come<br />funziona
             </h2>
             <!-- Animated step counter -->
-            <div class="mt-10 overflow-hidden">
+            <div class="mt-10 overflow-hidden hidden md:block">
               <span
                 ref="stepCounterEl"
                 class="font-serif font-light leading-none text-sand/35 select-none block"
@@ -296,7 +294,7 @@
               >
             </div>
             <!-- Step progress dots -->
-            <div class="mt-5 flex gap-1.5 items-center">
+            <div class="mt-5 gap-1.5 items-center hidden md:block">
               <div
                 v-for="(_, i) in experienceSteps"
                 :key="i"
@@ -307,20 +305,20 @@
           </div>
 
           <!-- Steps — stacked vertically on mobile, absolutely positioned on desktop -->
-          <div class="md:col-span-7 md:col-start-6 relative md:min-h-[52vh]">
+          <div
+            class="relative h-[82vh] md:h-auto md:col-span-7 md:col-start-6 md:min-h-[52vh] overflow-hidden"
+          >
             <div
               v-for="(step, i) in experienceSteps"
               :key="i"
-              class="experience-step w-full md:absolute md:inset-x-0 md:top-0"
+              class="experience-step absolute inset-0 flex items-center justify-center px-2 md:inset-x-0 md:top-0"
               style="opacity: 0; transform: translateY(32px)"
             >
               <div
-                class="flex flex-col md:flex-row gap-8 md:gap-14 items-center w-full"
+                class="w-full max-w-md bg-[#fbf7f2] shadow-[0_25px_80px_rgba(0,0,0,.12)] p-6 flex flex-col gap-6 md:max-w-none md:bg-transparent md:shadow-none md:p-0 md:flex-row md:gap-14 items-center"
               >
                 <!-- Step Image (Hidden on small mobile, visible on tablet+) -->
-                <div
-                  class="hidden md:block w-full md:w-1/2 aspect-[4/5] overflow-hidden rounded-sm shadow-xl"
-                >
+                <div class="w-full aspect-[4/5] overflow-hidden md:w-1/2">
                   <NuxtImg
                     :src="galleryImages[i % galleryImages.length]"
                     :alt="step.title"
@@ -821,7 +819,7 @@ const experienceSteps = [
   {
     title: 'Post-produzione',
     description:
-      'Ogni immagine viene selezionata e ritoccata a mano con cura artigianale. Nessun filtro, solo luce vera.',
+      'Ogni immagine viene selezionata e ritoccata a mano con cura artigianale.',
   },
   {
     title: 'Consegna gallery',
@@ -857,7 +855,7 @@ const faqItems = [
   {
     question: 'Quanto dura una sessione fotografica?',
     answer:
-      'La durata varia in base al pacchetto scelto, in genere tra 1 e 3 ore. Non fissiamo limiti rigidi — prendiamo sempre il tempo che serve.',
+      'La durata varia in base al pacchetto scelto, in genere tra 2 e 5 ore. Non fissiamo limiti rigidi — prendiamo sempre il tempo che serve.',
   },
   {
     question: 'Posso scegliere la location?',
@@ -872,12 +870,7 @@ const faqItems = [
   {
     question: 'Posso ordinare stampe in seguito?',
     answer:
-      'Sì. Dopo la consegna della gallery puoi ordinare stampe fine art e album in qualsiasi momento.',
-  },
-  {
-    question: 'Come avviene il pagamento?',
-    answer:
-      'È richiesto un acconto del 30% alla prenotazione. Il saldo viene completato entro il giorno della sessione.',
+      'Sì, ma non sono incluse nel pacchetto. Posso consigliarti laboratori di stampa professionali per ottenere il massimo dalle tue immagini.',
   },
 ];
 
@@ -964,7 +957,7 @@ onMounted(() => {
           trigger: heroRef.value,
           start: 'center center',
           end: 'bottom top',
-          scrub: 1.2,
+          scrub: 0.25,
         },
       });
     }
@@ -1149,28 +1142,80 @@ onMounted(() => {
 
       // ── Mobile: simple stacked scroll-reveals (no pin, no absolute overlap) ──
       expMm.add('(max-width: 767px)', () => {
-        steps.forEach((step) => {
-          gsap.fromTo(
+        const tl = gsap.timeline();
+
+        gsap.set(steps, {
+          opacity: 0,
+          y: 120,
+          scale: 0.92,
+        });
+
+        gsap.set(steps[0]!, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+        });
+
+        steps.forEach((step, i) => {
+          if (i > 0) {
+            tl.to(steps[i - 1]!, {
+              opacity: 0,
+              scale: 0.94,
+              y: -80,
+              duration: 0.45,
+            });
+          }
+
+          tl.fromTo(
             step,
-            { opacity: 0, y: 24 },
+            {
+              opacity: 0,
+              y: 120,
+              scale: 0.92,
+            },
             {
               opacity: 1,
               y: 0,
-              duration: 0.7,
+              scale: 1,
+              duration: 0.55,
               ease: 'power3.out',
-              scrollTrigger: {
-                trigger: step,
-                start: 'top 85%',
-                toggleActions: 'play none none reverse',
-              },
             },
+            '<',
           );
+
+          if (i < steps.length - 1) {
+            tl.to(
+              {},
+              {
+                duration: 1,
+              },
+            );
+          }
+        });
+
+        ScrollTrigger.create({
+          trigger: experienceRef.value,
+
+          pin: true,
+
+          start: 'top top',
+
+          end: '+=' + window.innerHeight * steps.length,
+
+          scrub: 0.35,
+
+          snap: {
+            snapTo: 1 / (steps.length - 1),
+            duration: 0.25,
+          },
+
+          animation: tl,
         });
       });
 
       // ── Desktop: pinned scrubbed timeline ────────────────────────────────
       expMm.add('(min-width: 768px)', () => {
-        const SCROLL_PER_STEP = 320;
+        const SCROLL_PER_STEP = 220;
         let currentStep = -1;
 
         gsap.set(steps, { opacity: 0, y: 36 });
@@ -1196,7 +1241,6 @@ onMounted(() => {
               opacity: 1,
               duration: 0.3,
               ease: 'power3.out',
-              force3D: true,
             },
             i === 0 ? '>' : '>-0.05',
           );
@@ -1205,7 +1249,7 @@ onMounted(() => {
             tl.fromTo(
               img,
               { scale: 1.15 },
-              { scale: 1, duration: 1.2, ease: 'power2.out', force3D: true },
+              { scale: 1, duration: 1.2, ease: 'power2.out' },
               '<',
             );
           }
@@ -1380,7 +1424,6 @@ onMounted(() => {
               duration: 1.2,
               ease: 'power4.out',
               delay: i * 0.15,
-              force3D: true, // <--- Add this!
               scrollTrigger: {
                 trigger: card,
                 start: 'top 85%',

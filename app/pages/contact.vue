@@ -310,21 +310,6 @@
                 >
                   {{ submitting ? 'Invio in corso...' : 'Invia messaggio' }}
                 </button>
-
-                <p
-                  v-if="submitted"
-                  class="mt-8 font-sans text-sm text-stone-600 font-light"
-                  role="status"
-                >
-                  ✓ Messaggio inviato. Ti rispondo entro 24 ore.
-                </p>
-                <p
-                  v-if="error"
-                  class="mt-8 font-sans text-sm text-red-500 font-light"
-                  role="alert"
-                >
-                  Si è verificato un errore. Riprova o scrivimi direttamente.
-                </p>
               </div>
             </form>
           </div>
@@ -529,6 +514,61 @@
 
     <!-- Footer -->
     <SiteFooter />
+
+    <!-- ═══════════════════════════════════════════════════════
+         TOAST NOTIFICATION
+    ══════════════════════════════════════════════════════════ -->
+    <Transition name="toast">
+      <div
+        v-if="toast.visible"
+        class="toast-wrap"
+        :role="toast.type === 'success' ? 'status' : 'alert'"
+        aria-live="polite"
+      >
+        <span
+          class="toast-accent"
+          :class="
+            toast.type === 'success' ? 'toast-accent--ok' : 'toast-accent--err'
+          "
+        />
+        <div class="toast-body">
+          <p class="toast-eyebrow">
+            {{
+              toast.type === 'success'
+                ? 'Messaggio inviato'
+                : 'Qualcosa è andato storto'
+            }}
+          </p>
+          <p class="toast-message">{{ toast.message }}</p>
+        </div>
+        <button
+          class="toast-close"
+          aria-label="Chiudi"
+          @click="toast.visible = false"
+        >
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <line
+              x1="1"
+              y1="1"
+              x2="9"
+              y2="9"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+            />
+            <line
+              x1="9"
+              y1="1"
+              x2="1"
+              y2="9"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -553,16 +593,43 @@ const form = reactive({
 });
 
 const submitting = ref(false);
-const submitted = ref(false);
-const error = ref(false);
+
+const toast = reactive<{
+  visible: boolean;
+  type: 'success' | 'error';
+  message: string;
+}>({
+  visible: false,
+  type: 'success',
+  message: '',
+});
+let toastTimer: ReturnType<typeof setTimeout> | null = null;
+
+function showToast(type: 'success' | 'error', message: string) {
+  if (toastTimer) clearTimeout(toastTimer);
+  toast.type = type;
+  toast.message = message;
+  toast.visible = true;
+  toastTimer = setTimeout(() => {
+    toast.visible = false;
+  }, 5500);
+}
 
 async function handleSubmit() {
   if (!form.name || !form.email || !form.message) return;
   submitting.value = true;
-  error.value = false;
   try {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    submitted.value = true;
+    await $fetch('/api/contact', {
+      method: 'POST',
+      body: {
+        name: form.name,
+        email: form.email,
+        phone: form.phone,
+        service: form.service,
+        message: form.message,
+      },
+    });
+    showToast('success', 'Grazie — ti rispondo entro 24 ore.');
     Object.assign(form, {
       name: '',
       email: '',
@@ -571,7 +638,7 @@ async function handleSubmit() {
       message: '',
     });
   } catch {
-    error.value = true;
+    showToast('error', 'Riprova o scrivimi direttamente via email.');
   } finally {
     submitting.value = false;
   }
@@ -827,5 +894,90 @@ select.field-input {
 /* ── Instagram grid ──────────────────────────────────────── */
 .ig-item {
   display: block;
+}
+
+/* ── Toast ───────────────────────────────────────────────── */
+.toast-wrap {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 9999;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  background: #262624;
+  max-width: 22rem;
+  width: calc(100vw - 2.5rem);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.28);
+}
+
+.toast-accent {
+  width: 2px;
+  flex-shrink: 0;
+}
+.toast-accent--ok {
+  background: #c4a882;
+}
+.toast-accent--err {
+  background: #a05050;
+}
+
+.toast-body {
+  padding: 1.25rem 1.25rem 1.25rem 1.1rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.toast-eyebrow {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(245, 242, 236, 0.4);
+  margin: 0 0 0.45rem;
+}
+
+.toast-message {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: #f5f2ec;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.toast-close {
+  flex-shrink: 0;
+  padding: 0 1rem;
+  color: rgba(245, 242, 236, 0.3);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.25s;
+  display: flex;
+  align-items: center;
+}
+.toast-close:hover {
+  color: #f5f2ec;
+}
+
+/* Transition */
+.toast-enter-active {
+  transition:
+    opacity 0.45s ease,
+    transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toast-leave-active {
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
+}
+.toast-enter-from {
+  opacity: 0;
+  transform: translateY(1.2rem);
+}
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(0.5rem);
 }
 </style>

@@ -212,6 +212,7 @@ export const services: Service[] = [
       '/images/nature-01.jpg',
       '/images/mother-nature-03.jpg',
       '/images/nature-02.jpg',
+      '/images/mother-nature-04.jpg',
     ],
     featured: false,
   },

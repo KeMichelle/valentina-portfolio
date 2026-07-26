@@ -60,7 +60,7 @@
 
             <h3
               class="font-serif text-white leading-none"
-              style="font-size: clamp(1.4rem, 2vw, 2.2rem)"
+              style="font-size: clamp(1.1rem, 1.25vw + 0.8rem, 1.6rem)"
             >
               {{ service.title }}
             </h3>
