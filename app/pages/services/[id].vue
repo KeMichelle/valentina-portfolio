@@ -15,10 +15,21 @@
             :src="service.cover"
             :alt="service.title"
             format="webp"
+            width="600"
+            height="900"
+            sizes="sm:600px"
+            loading="eager"
+            class="block md:hidden w-full h-full object-cover object-center"
+          />
+          <NuxtImg
+            :src="service.cover"
+            :alt="service.title"
+            format="webp"
             width="1920"
             height="1080"
+            sizes="md:1200px lg:1920px"
             loading="eager"
-            class="w-full h-full object-cover"
+            class="hidden md:block w-full h-full object-cover object-center"
           />
           <div
             class="absolute inset-0 bg-gradient-to-t from-charcoal/60 via-charcoal/10 to-charcoal/20"
@@ -262,10 +273,10 @@
       ════════════════════════════════════════════════════ -->
       <section
         ref="experienceRef"
-        class="py-10 md:py-24 px-8 md:px-16 lg:px-28 border-t border-sand/40"
+        class="pt-4 pb-0 md:py-24 px-8 md:px-16 lg:px-28 border-t border-sand/40"
       >
         <div
-          class="grid grid-cols-1 md:grid-cols-12 gap-y-20 md:gap-8 items-start max-w-screen-xl mx-auto"
+          class="grid grid-cols-1 md:grid-cols-12 gap-y-2 md:gap-8 items-start max-w-screen-xl mx-auto"
         >
           <!-- Left label + heading -->
           <div
@@ -306,7 +317,7 @@
 
           <!-- Steps — stacked vertically on mobile, absolutely positioned on desktop -->
           <div
-            class="relative h-[82vh] md:h-auto md:col-span-7 md:col-start-6 md:min-h-[52vh] overflow-hidden"
+            class="relative h-[calc(100svh-130px)] md:h-auto md:col-span-7 md:col-start-6 md:min-h-[52vh] overflow-hidden"
           >
             <div
               v-for="(step, i) in experienceSteps"
@@ -715,13 +726,24 @@
           style="transform: scale(1.12)"
         >
           <NuxtImg
+            :src="galleryImages[0]"
+            :alt="service.title"
+            format="webp"
+            width="600"
+            height="900"
+            sizes="sm:600px"
+            loading="lazy"
+            class="block md:hidden w-full h-full object-cover object-center"
+          />
+          <NuxtImg
             :src="service.cover"
             :alt="service.title"
             format="webp"
             width="1920"
             height="1080"
+            sizes="md:1200px lg:1920px"
             loading="lazy"
-            class="w-full h-full object-cover"
+            class="hidden md:block w-full h-full object-cover object-center"
           />
           <div class="absolute inset-0 bg-charcoal/52" />
         </div>
@@ -1195,27 +1217,17 @@ onMounted(() => {
 
         ScrollTrigger.create({
           trigger: experienceRef.value,
-
           pin: true,
-
           start: 'top top',
-
           end: '+=' + window.innerHeight * steps.length,
-
-          scrub: 0.35,
-
-          snap: {
-            snapTo: 1 / (steps.length - 1),
-            duration: 0.25,
-          },
-
+          scrub: 0.5,
           animation: tl,
         });
       });
 
       // ── Desktop: pinned scrubbed timeline ────────────────────────────────
       expMm.add('(min-width: 768px)', () => {
-        const SCROLL_PER_STEP = 220;
+        const SCROLL_PER_STEP = 150;
         let currentStep = -1;
 
         gsap.set(steps, { opacity: 0, y: 36 });
@@ -1263,7 +1275,7 @@ onMounted(() => {
           anticipatePin: 1,
           start: 'top top',
           end: `+=${steps.length * SCROLL_PER_STEP}`,
-          scrub: 1,
+          scrub: 0.5,
           animation: tl,
           onUpdate: (self) => {
             const idx = Math.min(
@@ -1299,7 +1311,7 @@ onMounted(() => {
               trigger: experienceRef.value,
               start: 'top top',
               end: `+=${steps.length * SCROLL_PER_STEP}`,
-              scrub: 1.2,
+              scrub: 0.6,
             },
           });
         }

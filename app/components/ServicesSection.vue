@@ -35,14 +35,25 @@
           :to="`/services/${service.slug}`"
           class="group block relative w-full h-full"
         >
-          <!-- Using object-cover automatically resizes the image to fit the vertical container on phone -->
+          <!-- Mobile: portrait gallery image; desktop: landscape cover -->
+          <NuxtImg
+            :src="service.cover"
+            format="webp"
+            width="600"
+            height="900"
+            sizes="sm:600px"
+            :alt="service.title"
+            class="service-img block lg:hidden absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
           <NuxtImg
             :src="service.cover"
             format="webp"
             width="1920"
             height="1080"
+            sizes="lg:1920px"
             :alt="service.title"
-            class="service-img absolute inset-0 w-full h-full object-cover lg:will-change-transform"
+            class="service-img service-img-desktop hidden lg:block absolute inset-0 w-full h-full object-cover lg:will-change-transform"
             loading="lazy"
           />
 
@@ -132,7 +143,7 @@ onMounted(() => {
     const cards = gsap.utils.toArray<HTMLElement>('.service-card');
 
     cards.forEach((card) => {
-      const img = card.querySelector('.service-img');
+      const img = card.querySelector('.service-img-desktop');
       const title = card.querySelector('.service-title');
       const text = card.querySelector('.service-text');
       const tag = card.querySelector('.service-tag');
