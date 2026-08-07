@@ -180,10 +180,35 @@
                     Studio
                   </p>
                   <p
-                    class="font-sans text-sm text-stone-600 font-light leading-relaxed"
+                    class="font-sans text-sm text-stone-600 font-light leading-relaxed mb-3"
                   >
-                    Bergamo, Lombardia<br />Disponibile in tutta Italia
+                    Romano di Lombardia, via della Morlana 23<br />Bergamo,
+                    Lombardia<br />Disponibile in tutta Italia
                   </p>
+                  <a
+                    href="https://maps.app.goo.gl/AVUjnRYbnF2Ssd69A"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 font-sans text-xs uppercase tracking-[0.25em] text-stone-400 hover:text-stone-700 transition-colors duration-300"
+                  >
+                    <svg
+                      width="11"
+                      height="11"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path
+                        d="M12 21C12 21 5 13.5 5 8.5a7 7 0 0 1 14 0c0 5-7 12.5-7 12.5z"
+                      />
+                      <circle cx="12" cy="8.5" r="2.5" />
+                    </svg>
+                    Aprire su Google Maps
+                  </a>
                 </div>
                 <div>
                   <p
@@ -302,6 +327,29 @@
               </div>
 
               <!-- Submit -->
+              <!-- GDPR Consent -->
+              <div class="flex items-start gap-4">
+                <input
+                  id="privacy"
+                  v-model="form.privacy"
+                  type="checkbox"
+                  required
+                  class="mt-1 flex-shrink-0 w-4 h-4 cursor-pointer accent-[#262624]"
+                />
+                <label
+                  for="privacy"
+                  class="font-sans text-xs text-stone-500 font-light leading-relaxed"
+                >
+                  Ho letto e accetto l'<NuxtLink
+                    to="/privacy"
+                    class="underline underline-offset-2 hover:text-stone-900 transition-colors duration-300"
+                    >Informativa sulla Privacy</NuxtLink
+                  >
+                  e acconsento al trattamento dei miei dati personali per essere
+                  ricontattata/o in merito alla mia richiesta. *
+                </label>
+              </div>
+
               <div class="pt-4">
                 <button
                   type="submit"
@@ -576,7 +624,45 @@ import { useServices } from '~/composables/useServices';
 
 gsap.registerPlugin(ScrollTrigger);
 
-useHead({ title: 'Contatto — Valentina Cometti' });
+const {
+  public: { siteUrl },
+} = useRuntimeConfig();
+
+useSeoMeta({
+  title: 'Contatto — Valentina Cometti Fotografa Bergamo',
+  description:
+    'Contatta Valentina Cometti, fotografa a Bergamo. Studio in Romano di Lombardia. Prenota la tua sessione fotografica di maternità, newborn o famiglia.',
+  ogTitle: 'Contatto — Valentina Cometti Fotografa Bergamo',
+  ogDescription:
+    'Prenota la tua sessione fotografica con Valentina Cometti a Bergamo, Brescia e Milano.',
+  ogUrl: `${siteUrl}/contact`,
+});
+
+useHead({
+  link: [{ rel: 'canonical', href: `${siteUrl}/contact` }],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        name: 'Valentina Cometti Fotografa',
+        url: siteUrl,
+        email: 'valentinacomettifotografa@outlook.it',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Via della Morlana 23',
+          addressLocality: 'Romano di Lombardia',
+          addressRegion: 'Bergamo',
+          postalCode: '24058',
+          addressCountry: 'IT',
+        },
+        areaServed: ['Bergamo', 'Brescia', 'Milano', 'Italia'],
+        sameAs: ['https://www.instagram.com/by.mothernature.fotografie/'],
+      }),
+    },
+  ],
+});
 
 const { services } = useServices();
 
@@ -587,6 +673,7 @@ const form = reactive({
   phone: '',
   service: '',
   message: '',
+  privacy: false,
 });
 
 const submitting = ref(false);
@@ -613,7 +700,7 @@ function showToast(type: 'success' | 'error', message: string) {
 }
 
 async function handleSubmit() {
-  if (!form.name || !form.email || !form.message) return;
+  if (!form.name || !form.email || !form.message || !form.privacy) return;
   submitting.value = true;
   try {
     await $fetch('/api/contact', {
@@ -633,6 +720,7 @@ async function handleSubmit() {
       phone: '',
       service: '',
       message: '',
+      privacy: false,
     });
   } catch {
     showToast('error', 'Riprova o scrivimi direttamente via email.');
@@ -646,20 +734,32 @@ const faqOpen = ref<number | null>(null);
 
 const faqItems = [
   {
-    q: 'Come si svolge una sessione di maternità?',
-    a: 'Le sessioni si tengono solitamente tra la 28ª e la 36ª settimana. Ci troviamo in un luogo significativo per te — casa, un bosco, la costa — e lavoriamo con la luce naturale del momento. Nessuna posa forzata: solo presenza.',
+    q: 'Qual è il momento migliore per una sessione di gravidanza?',
+    a: 'Tendenzialmente al settimo mese.',
   },
   {
-    q: 'Quanto tempo prima devo prenotare?',
-    a: 'Consiglio almeno 8–10 settimane prima. Per i newborn, il periodo ideale è il 5°–14° giorno di vita: meglio prenotare già in gravidanza per non perdere quella finestra così preziosa.',
+    q: 'Quanto tempo prima devo prenotare la sessione di gravidanza?',
+    a: 'Almeno 1–2 mesi di anticipo.',
+  },
+  {
+    q: 'Qual è il momento migliore per una sessione Newborn?',
+    a: 'Tendenzialmente dalla prima settimana di vita del neonato fino ai 30 giorni. Dopo questa data diventerà una sessione oldborn.',
+  },
+  {
+    q: 'Quanto tempo prima devo prenotare per un Newborn?',
+    a: 'Almeno 1–2 mesi di anticipo. Consiglio di prenotare quando si è ancora in gravidanza.',
+  },
+  {
+    q: 'Qual è il momento migliore per una sessione Smash Cake?',
+    a: 'Tendenzialmente 2 settimane prima del giorno del compleanno.',
+  },
+  {
+    q: 'Quanto tempo prima devo prenotare per lo Smash Cake?',
+    a: 'Almeno 2 mesi di anticipo.',
   },
   {
     q: 'Quando riceverò le fotografie?',
-    a: 'La gallery online viene consegnata entro 3–4 settimane. Per i newborn, entro 2 settimane. Ogni immagine è selezionata e ritoccata singolarmente non filtri in blocco.',
-  },
-  {
-    q: 'Posso stampare le foto?',
-    a: 'Sì, ogni pacchetto include licenza di stampa personale illimitata. Collaboro anche con un laboratorio artigianale per album fine-art e stampe museum-quality.',
+    a: 'La gallery online viene consegnata entro 3–4 settimane dalla sessione. Per le sessioni Smash Cake entro 2 settimane. Ogni gallery include immagini selezionate e ritoccate singolarmente.',
   },
   {
     q: 'Lavori anche fuori dalla Lombardia?',
@@ -671,38 +771,22 @@ const faqItems = [
 const testimonials = [
   {
     quote:
-      'Valentina ha catturato qualcosa che non sapevo come descrivere a parole. Le foto sono diventate il tesoro più prezioso di tutta la mia gravidanza.',
-    name: 'Martina R.',
-    service: 'Servizio Maternità',
+      "Ho fatto uno shooting privato nella natura con Valentina e non avrei potuto desiderare un'esperienza più bella. Mi ha fatta sentire completamente a mio agio, accolta e ascoltata. È una persona davvero speciale, molto umana, empatica e gentile. Oltre ad essere una fotografa di grande talento, ha un cuore enorme.",
+    name: 'Michelle Ly',
+    service: 'Shooting Natura',
   },
   {
     quote:
-      'Avevo paura di non essere fotogenica. Valentina mi ha fatto sentire a mio agio in ogni istante. Le immagini sembrano un sogno.',
-    name: 'Sofia B.',
-    service: 'Servizio Newborn',
+      "Oltre ad essere un'eccellente professionista i suoi lavori sono sempre eleganti, armoniosi, raffinati e curati nei minimi dettagli. I suoi set sono ricercati e saprà mettervi a proprio agio con la sua dolcezza e l'entusiasmo che la contraddistinguono.",
+    name: 'Greta Nicoli',
+    service: 'Recensione Google',
   },
   {
     quote:
-      'Non sono mai riuscita a definire cosa cercavo — lei lo ha capito ancora prima che io parlassi. Un\u2019artista vera.',
-    name: 'Chiara M.',
-    service: 'Servizio Maternità',
+      'Paziente, gentile, solare e sa mettere a proprio agio le persone! Lavora in modo impeccabile, è molto attenta al benessere dei clienti e le sue foto sono meravigliose! Coglie le emozioni come pochi sono in grado di fare.',
+    name: 'Giulia Mazzola',
+    service: 'Recensione Google',
   },
-];
-
-// ── Instagram grid ────────────────────────────────────────────────────────────
-const instagramGrid = [
-  { src: '/images/about-01.jpg', alt: 'Maternità', tall: false },
-  {
-    src: '/images/service-maternity.jpg',
-    alt: 'Maternità golden hour',
-    tall: true,
-  },
-  { src: '/images/about-02.jpg', alt: 'Ritratto', tall: false },
-  { src: '/images/service-neonati.jpg', alt: 'Neonato', tall: false },
-  { src: '/images/story-card.jpg', alt: 'Luce naturale', tall: false },
-  { src: '/images/about-03.jpg', alt: 'Outdoor', tall: false },
-  { src: '/images/service-matrimonio.jpg', alt: 'Matrimonio', tall: false },
-  { src: '/images/service-smash-cake.jpg', alt: 'Smash Cake', tall: false },
 ];
 
 // ── Scroll to form ────────────────────────────────────────────────────────────

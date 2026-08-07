@@ -50,6 +50,7 @@
             width="640"
             height="853"
             loading="lazy"
+            alt="Valentina Cometti fotografa Bergamo — ritratto"
             class="w-full object-cover will-change-transform block"
             style="aspect-ratio: 3/4; height: auto"
           />
@@ -67,6 +68,7 @@
                 width="400"
                 height="500"
                 loading="lazy"
+                alt="Valentina Cometti — fotografa di maternità e famiglia a Bergamo"
                 class="w-full object-cover will-change-transform block"
                 style="aspect-ratio: 4/5; height: auto"
               />
@@ -80,8 +82,9 @@
             <p
               class="font-sans text-sm lg:text-[15px] leading-[2.1] text-stone-600 font-light"
             >
-              Sono Valentina, fotografa tra Brescia, il Lago d'Iseo e ovunque
-              una storia meriti di essere raccontata.
+              Sono Valentina, un'artista che racconta il mondo attraverso la
+              fotografia. Le mie fotografie raccontano storie di Bergamo,
+              Brescia, Milano e ovunque una storia meriti di essere raccontata.
             </p>
             <p
               class="font-sans text-sm lg:text-[15px] leading-[2.1] text-stone-600 font-light"
@@ -94,7 +97,8 @@
             <p
               class="font-sans text-sm lg:text-[15px] leading-[2.0] text-stone-500 font-light italic"
             >
-              È lo stesso sguardo che porto in ogni servizio fotografico.
+              Questa è la visione che troverete in ogni servizio fotografico
+              fatto insieme.
             </p>
           </div>
         </div>
@@ -112,14 +116,15 @@
               class="font-sans text-sm lg:text-[15px] leading-[2.1] text-stone-600 font-light"
             >
               Mi piace prendermi il tempo di conoscervi, ascoltarvi e creare uno
-              spazio in cui possiate sentirvi completamente voi stessi. Senza
-              pose forzate, senza fretta, senza aspettative.
+              spazio in cui possiate sentirvi completamente voi stessi, ma
+              soprattutto coccolati. La priorità per me è farvi stare bene.
             </p>
             <p
               class="font-sans text-sm lg:text-[15px] leading-[2.1] text-stone-600 font-light"
             >
-              Credo nelle mani che si cercano, nei sorrisi spontanei, negli
-              abbracci silenziosi e nella luce che cambia durante la giornata.
+              Niente fretta, il tempo con me scorre sempre lento. Viviamo ogni
+              giorno in modo frenetico e nello spazio che ricaverete insieme a
+              me, vivremo un momento tranquillo e sereno.
             </p>
           </div>
 
@@ -132,7 +137,9 @@
               padding-top: 1.5rem;
             "
           >
-            Le mie fotografie<br />non vogliono<br />essere perfette.
+            Se vuoi fotografie<br />poetiche e luminose,<br /><em
+              >sono qui per te.</em
+            >
           </blockquote>
         </div>
 
@@ -147,6 +154,7 @@
               width="640"
               height="800"
               loading="lazy"
+              alt="Valentina Cometti fotografa — sessione fotografica Bergamo"
               class="w-full object-cover will-change-transform block"
               style="aspect-ratio: 4/5; height: auto"
             />
@@ -216,30 +224,6 @@ onMounted(() => {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   ctx = gsap.context(() => {
-    // ── FLOWER DRAW ───────────────────────────────────────────────────────────
-    const svgEl = flowerContainer.value?.querySelector('svg');
-    if (svgEl) {
-      const paths = Array.from(svgEl.querySelectorAll('path'));
-      paths.forEach((path) => {
-        const len = path.getTotalLength();
-        path.style.fill = 'none';
-        path.style.stroke = 'currentColor';
-        path.style.strokeWidth = '1';
-        path.style.strokeDasharray = String(len);
-        path.style.strokeDashoffset = String(len);
-      });
-      gsap.to(paths, {
-        strokeDashoffset: 0,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section.value,
-          start: 'top 70%',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
-    }
-
     // ── FLOWER PARALLAX ───────────────────────────────────────────────────────
     if (flowerContainer.value) {
       gsap.to(flowerContainer.value, {

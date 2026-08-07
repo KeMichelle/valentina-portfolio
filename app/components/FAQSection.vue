@@ -102,24 +102,56 @@ const open = ref<number | null>(null);
 
 const items = [
   {
-    q: 'Come si svolge una sessione di maternità?',
-    a: 'Le sessioni di maternità si tengono solitamente tra la 28ª e la 36ª settimana. Ci troviamo in un luogo significativo per te — casa tua, un bosco, la costa e lavoriamo con la luce naturale del momento. Non ci sono pose forzate: solo movimento, respiro e presenza.',
+    q: 'Qual è il momento migliore per una sessione di gravidanza?',
+    a: 'Tendenzialmente al settimo mese.',
   },
   {
-    q: 'Quanto tempo prima devo prenotare?',
-    a: 'Consiglio di prenotare almeno 8–10 settimane prima della data desiderata, soprattutto per sessioni di maternità dove il timing è delicato. Per i newborn, il periodo ideale è tra il 5° e il 14° giorno di vita; meglio prenotare durante la gravidanza.',
+    q: 'Quanto tempo prima devo prenotare la sessione di gravidanza?',
+    a: 'Almeno 1–2 mesi di anticipo.',
+  },
+  {
+    q: 'Qual è il momento migliore per una sessione Newborn?',
+    a: 'Tendenzialmente dalla prima settimana di vita del neonato fino ai 30 giorni. Dopo questa data diventerà una sessione oldborn.',
+  },
+  {
+    q: 'Quanto tempo prima devo prenotare per un Newborn?',
+    a: 'Almeno 1–2 mesi di anticipo. Consiglio di prenotare quando si è ancora in gravidanza.',
+  },
+  {
+    q: 'Qual è il momento migliore per una sessione Smash Cake?',
+    a: 'Tendenzialmente 2 settimane prima del giorno del compleanno.',
+  },
+  {
+    q: 'Quanto tempo prima devo prenotare per lo Smash Cake?',
+    a: 'Almeno 2 mesi di anticipo.',
   },
   {
     q: 'Quando riceverò le fotografie?',
-    a: 'La gallery online viene consegnata entro 3–4 settimane dalla sessione. Per i newborn, entro 2 settimane. Ogni gallery include immagini selezionate e ritoccate singolarmente, non filtri applicati in blocco.',
-  },
-  {
-    q: 'Posso stampare le foto?',
-    a: 'Sì. Con ogni pacchetto ricevi una licenza di stampa personale illimitata. Collaboro anche con un laboratorio artigianale per album fine-art e stampe museum-quality, possiamo parlarne durante la nostra call conoscitiva.',
+    a: 'La gallery online viene consegnata entro 3–4 settimane dalla sessione. Per le sessioni Smash Cake entro 2 settimane. Ogni gallery include immagini selezionate e ritoccate singolarmente.',
   },
   {
     q: 'Lavori anche fuori dalla Lombardia?',
     a: "Assolutamente sì. Sono disponibile a viaggiare in tutta Italia e all'estero. Le spese di trasferta vengono concordate in modo trasparente prima della prenotazione.",
   },
 ];
+
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: items.map((item) => ({
+          '@type': 'Question',
+          name: item.q,
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: item.a,
+          },
+        })),
+      }),
+    },
+  ],
+});
 </script>

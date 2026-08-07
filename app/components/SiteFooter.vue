@@ -48,8 +48,11 @@
           >
             valentinacomettifotografa@outlook.it
           </a>
-          <span
-            class="flex items-center gap-2 font-sans text-sm text-[#F5F2EC]/50"
+          <a
+            href="https://maps.app.goo.gl/AVUjnRYbnF2Ssd69A"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-2 font-sans text-sm text-[#F5F2EC]/50 hover:text-[#F5F2EC]/80 transition-colors duration-300"
           >
             <svg
               width="14"
@@ -68,7 +71,7 @@
               <circle cx="12" cy="8.5" r="2.5" />
             </svg>
             Studio Valentina Cometti — Bergamo
-          </span>
+          </a>
         </div>
 
         <nav
@@ -95,9 +98,16 @@
         class="mt-5 font-sans text-[0.62rem] uppercase tracking-widest"
         style="color: rgba(245, 242, 236, 0.2)"
       >
-        © {{ year }} Valentina Cometti Fotografia — P.IVA in fase di
-        registrazione
+        © {{ year }} Valentina Cometti Fotografia — P.IVA : 04260410164
       </p>
+      <div class="mt-3 flex gap-5">
+        <NuxtLink to="/privacy" class="footer-legal-link"
+          >Privacy Policy</NuxtLink
+        >
+        <NuxtLink to="/cookie-policy" class="footer-legal-link"
+          >Cookie Policy</NuxtLink
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -140,5 +150,18 @@ function handleNavClick(e: MouseEvent) {
 }
 .footer-nav-link:hover {
   color: #f5f2ec;
+}
+
+.footer-legal-link {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(245, 242, 236, 0.2);
+  transition: color 0.3s;
+}
+
+.footer-legal-link:hover {
+  color: rgba(245, 242, 236, 0.5);
 }
 </style>

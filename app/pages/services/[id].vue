@@ -166,7 +166,7 @@
             >
               <NuxtImg
                 :src="img"
-                :alt="`${service.title} — ${i * 2 + 1}`"
+                :alt="`${service.category} Bergamo — Valentina Cometti fotografa — foto ${i * 2 + 1}`"
                 format="webp"
                 width="600"
                 height="800"
@@ -186,7 +186,7 @@
             >
               <NuxtImg
                 :src="img"
-                :alt="`${service.title} — ${i * 2 + 2}`"
+                :alt="`${service.category} Bergamo — Valentina Cometti fotografa — foto ${i * 2 + 2}`"
                 format="webp"
                 width="600"
                 height="800"
@@ -210,7 +210,7 @@
             >
               <NuxtImg
                 :src="img"
-                :alt="`${service.title} — Col 1`"
+                :alt="`${service.category} Bergamo — Valentina Cometti — foto ${i * 3 + 1}`"
                 format="webp"
                 quality="80"
                 sizes="sm:100vw md:33vw lg:400px"
@@ -233,7 +233,7 @@
             >
               <NuxtImg
                 :src="img"
-                :alt="`${service.title} — Col 2`"
+                :alt="`${service.category} Bergamo — Valentina Cometti — foto ${i * 3 + 2}`"
                 format="webp"
                 width="800"
                 height="1000"
@@ -254,7 +254,7 @@
             >
               <NuxtImg
                 :src="img"
-                :alt="`${service.title} — Col 3`"
+                :alt="`${service.category} Bergamo — Valentina Cometti — foto ${i * 3 + 3}`"
                 format="webp"
                 quality="80"
                 sizes="sm:100vw md:33vw lg:400px"
@@ -803,6 +803,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 // ── Data ─────────────────────────────────────────────────────────────
 const route = useRoute();
+const {
+  public: { siteUrl },
+} = useRuntimeConfig();
 const service = computed(() => services.find((s) => s.id === route.params.id));
 
 const galleryImages = computed(() => {
@@ -821,6 +824,125 @@ const galleryImages = computed(() => {
   }
   return imgs;
 });
+
+// ── SEO ──────────────────────────────────────────────────────────────
+const seoMap: Record<
+  string,
+  { title: string; description: string; keywords: string }
+> = {
+  maternita: {
+    title: 'Fotografa Maternità Bergamo — Valentina Cometti',
+    description:
+      'Sessioni fotografiche di maternità a Bergamo con Valentina Cometti. Immagini poetiche e luminose per celebrare la tua gravidanza.',
+    keywords:
+      'fotografa maternità Bergamo, fotografa gravidanza Bergamo, servizio fotografico gravidanza Bergamo',
+  },
+  neonati: {
+    title: 'Fotografa Newborn Bergamo — Valentina Cometti',
+    description:
+      'Fotografia newborn e neonati a Bergamo con Valentina Cometti. Sessioni delicate in studio per i primi giorni di vita.',
+    keywords:
+      'fotografa newborn Bergamo, fotografa neonati Bergamo, fotografia neonato Bergamo',
+  },
+  famiglia: {
+    title: 'Fotografa Famiglia Bergamo — Valentina Cometti',
+    description:
+      'Servizi fotografici di famiglia a Bergamo con Valentina Cometti. Ritratti autentici e naturali per immortalare i vostri momenti più belli.',
+    keywords:
+      'fotografa famiglia Bergamo, servizio fotografico famiglia Bergamo, ritratti famiglia Bergamo',
+  },
+  'smash-cake': {
+    title: 'Fotografa Smash Cake Bergamo — Valentina Cometti',
+    description:
+      'Sessioni smash cake a Bergamo con Valentina Cometti. Fotografie colorate e gioiose per celebrare il primo anno del tuo bambino.',
+    keywords:
+      'fotografa smash cake Bergamo, primo compleanno fotografo Bergamo, smash cake Bergamo',
+  },
+  natale: {
+    title: 'Fotografa Natale Bergamo — Valentina Cometti',
+    description:
+      'Servizi fotografici natalizi a Bergamo con Valentina Cometti. Ritratti di famiglia in atmosfera magica e festiva.',
+    keywords:
+      'fotografa Natale Bergamo, foto Natale famiglia Bergamo, servizio fotografico natalizio Bergamo',
+  },
+  natura: {
+    title: 'Fotografa Natura Bergamo — Valentina Cometti',
+    description:
+      'Fotografia naturalistica a Bergamo con Valentina Cometti. Sessioni poetiche immerse nella natura.',
+    keywords:
+      'fotografa natura Bergamo, servizio fotografico outdoor Bergamo, fotografia naturalistica Bergamo',
+  },
+  'mommy-me': {
+    title: 'Fotografa Mommy & Me Bergamo — Valentina Cometti',
+    description:
+      'Sessioni fotografiche Mommy & Me a Bergamo con Valentina Cometti. Immagini del legame speciale tra mamma e bambino.',
+    keywords:
+      'fotografa mommy me Bergamo, foto mamma bambino Bergamo, sessione fotografica madre bambino Bergamo',
+  },
+  matrimonio: {
+    title: 'Fotografa Matrimoni Bergamo — Valentina Cometti',
+    description:
+      'Fotografia matrimoniale a Bergamo con Valentina Cometti. Documentazione autentica e poetica del giorno più importante della vostra vita.',
+    keywords:
+      'fotografa matrimoni Bergamo, fotografo matrimonio Bergamo, fotografia matrimoniale Bergamo',
+  },
+};
+
+const pageSeo = computed(() => {
+  const id = route.params.id as string;
+  return (
+    seoMap[id] ?? {
+      title: `${service.value?.title ?? 'Servizio'} — Valentina Cometti Fotografa Bergamo`,
+      description:
+        service.value?.description ??
+        'Scopri i servizi fotografici di Valentina Cometti a Bergamo.',
+      keywords: `fotografa Bergamo, ${service.value?.category ?? ''} Bergamo`,
+    }
+  );
+});
+
+useSeoMeta({
+  title: () => pageSeo.value.title,
+  description: () => pageSeo.value.description,
+  ogTitle: () => pageSeo.value.title,
+  ogDescription: () => pageSeo.value.description,
+  ogImage: () =>
+    `${siteUrl}${service.value?.cover ?? '/images/service-maternity.jpg'}`,
+  ogUrl: () => `${siteUrl}/services/${route.params.id}`,
+  twitterTitle: () => pageSeo.value.title,
+  twitterDescription: () => pageSeo.value.description,
+  twitterImage: () =>
+    `${siteUrl}${service.value?.cover ?? '/images/service-maternity.jpg'}`,
+});
+
+useHead(() => ({
+  link: [{ rel: 'canonical', href: `${siteUrl}/services/${route.params.id}` }],
+  meta: [{ name: 'keywords', content: pageSeo.value.keywords }],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Service',
+        name: service.value?.title,
+        description: service.value?.description,
+        provider: {
+          '@type': 'LocalBusiness',
+          name: 'Valentina Cometti Fotografa',
+          url: siteUrl,
+          address: {
+            '@type': 'PostalAddress',
+            addressLocality: 'Romano di Lombardia',
+            addressRegion: 'Bergamo',
+            addressCountry: 'IT',
+          },
+        },
+        areaServed: 'Bergamo, Lombardia, Italia',
+        url: `${siteUrl}/services/${route.params.id}`,
+      }),
+    },
+  ],
+}));
 
 const experienceSteps = [
   {

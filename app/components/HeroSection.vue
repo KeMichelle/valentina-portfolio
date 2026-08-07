@@ -31,7 +31,9 @@
         class="font-serif text-white leading-none tracking-tight"
         style="font-size: clamp(3rem, 10vw, 10rem); opacity: 0"
       >
-        Where Light<br />Tells Stories
+        Qui si raccontano<br />poesie, attraverso<br /><em class="not-italic"
+          >la Fotografia.</em
+        >
       </h1>
     </div>
   </section>

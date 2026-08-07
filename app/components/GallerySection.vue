@@ -6,11 +6,11 @@
   >
     <!-- FIX 1: Changed h-[100dvh] back to h-screen so it stops resizing while pinned -->
     <div class="sticky top-0 h-screen flex items-center overflow-hidden">
-      <p
+      <h2
         class="absolute top-10 left-6 lg:left-12 font-sans text-xs uppercase tracking-[0.3em] text-stone-400 z-10"
       >
         Experience
-      </p>
+      </h2>
 
       <!-- Mobile Scroll Cue -->
       <div
@@ -96,50 +96,50 @@ const hasScrolled = ref(false);
 const images = [
   {
     src: '/images/oldborn-03.jpg',
-    alt: 'Newborn',
+    alt: 'Fotografa neonati Bergamo — Valentina Cometti',
     label: 'Newborn',
     placeholder: '#EDE9E3',
   },
   {
     src: '/images/details-01.jpg',
-    alt: 'Maternità',
+    alt: 'Fotografia maternità Bergamo — dettagli gravidanza — Valentina Cometti',
     label: 'Maternity',
     placeholder: '#EDE9E3',
   },
   {
     src: '/images/smash-cake-03.jpg',
-    alt: 'Newborn',
-    label: 'Newborn',
+    alt: 'Fotografa smash cake Bergamo — Valentina Cometti',
+    label: 'Smash Cake',
     placeholder: '#EDE9E3',
   },
   {
     src: '/images/maternity-02.jpg',
-    alt: 'Maternità',
+    alt: 'Fotografia gravidanza Bergamo — Valentina Cometti',
     label: 'Maternity',
     placeholder: '#EDE9E3',
   },
   {
     src: '/images/newborn-01.jpg',
-    alt: 'Newborn',
+    alt: 'Fotografa newborn Bergamo — Valentina Cometti',
     label: 'Newborn',
     placeholder: '#EDE9E3',
   },
   {
     src: '/images/nature-01.jpg',
-    alt: 'Maternità',
-    label: 'Maternity',
+    alt: 'Fotografia natura Bergamo — Valentina Cometti',
+    label: 'Mothernature',
     placeholder: '#EDE9E3',
   },
   {
     src: '/images/oldborn-04.jpg',
-    alt: 'Newborn',
+    alt: 'Fotografa neonati Bergamo — sessione studio — Valentina Cometti',
     label: 'Newborn',
     placeholder: '#EDE9E3',
   },
   {
     src: '/images/details-02.jpg',
-    alt: 'Maternità',
-    label: 'Maternity',
+    alt: 'Fotografa famiglia Bergamo — dettagli servizio — Valentina Cometti',
+    label: 'Family',
     placeholder: '#EDE9E3',
   },
 ];

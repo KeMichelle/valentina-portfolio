@@ -29,21 +29,21 @@ export const services: Service[] = [
     cover: '/images/service-maternity.jpg',
     heroTag: '01 —',
     excerpt:
-      'Il tempo che precede. La luce sul ventre. Un capitolo intero scritto prima del primo respiro.',
+      "L'essere madre, ancora prima di vedere l'amore nei suoi occhi. L'essenza che si racconta prima di essere svelata al mondo.",
     description:
-      'Un momento sospeso, intimo e luminoso. Il tuo corpo che cambia, la luce che racconta. Ogni sessione di maternità è pensata per celebrare questa fase unica della tua vita con immagini senza tempo.',
+      "Un momento fotografico che racconta la tua essenza in questa fase speciale, un amore incondizionato raccontato attraverso immagini che svelano l'arte di una gravidanza meravigliosa. Qui ti sentirai nella fase migliore di te stessa.",
     pricing: [
       {
         name: 'Studio',
-        price: '€300',
+        price: '€350',
         includes:
-          'Sessione da 1 ora · studio · 20 immagini ritoccate · Gallery privata online',
+          'Sessione da 2 ore · Studio confortevole · 100 immagini editate · Gallery privata online · Guardaroba Clienti - abiti sartoriali mamma e piccini',
       },
       {
         name: 'Outdoor',
         price: '€400',
         includes:
-          'Sessione da 2 ore · location naturale · 30 immagini ritoccate · Gallery privata online',
+          'Sessione da 2 ore · Location esterna · 100 immagini editate · Mini clip video · Gallery privata online · Guardaroba Clienti - abiti sartoriali mamma e piccini',
       },
     ],
     gallery: [
@@ -65,21 +65,15 @@ export const services: Service[] = [
     cover: '/images/service-neonati.jpg',
     heroTag: '02 —',
     excerpt:
-      'Mani piccole quanto un fiore. Sonni profondi come oceani. Le prime ore del mondo.',
+      "I suoi primi attimi nel mondo, la vostra gioia e il vostro amore sono diventati qualcosa di concreto, un'esplosione di gioia e nient'altro che il vostro amore nei suoi e vostri occhi.",
     description:
-      'I primi giorni di vita sono irripetibili. Ogni piccolo dettaglio — le mani, i piedini, il respiro; merita di essere fermato nel tempo con delicatezza e amore.',
+      'Un momento fotografico tra i più speciali che verranno raccontati. Insieme trasformeremo i primi attimi della sua vita nel ricordo più prezioso che vi accompagnerà sempre come la cosa più bella al mondo.',
     pricing: [
       {
         name: 'Newborn',
         price: '€400',
         includes:
-          'Sessione da 2–3 ore · studio riscaldato · 30 immagini ritoccate · Gallery privata online',
-      },
-      {
-        name: 'Babies',
-        price: '€350',
-        includes:
-          'Sessione da 1.5 ore · 25 immagini ritoccate · Gallery privata online',
+          'Sessione da 3/4 ore · Studio confortevole · 100 immagini editate · Gallery privata online · Mini clip video · Guardaroba clienti - abiti sartoriali mamma e piccini',
       },
     ],
     gallery: [
@@ -101,21 +95,21 @@ export const services: Service[] = [
     cover: '/images/service-famiglia.jpg',
     heroTag: '03 —',
     excerpt:
-      'Il caos gentile di chi si ama. Le tavole apparecchiate, le risate rubate. La vita vera.',
+      'Il vostro amore si completa qui, nel disordine di quella che è la vita vera.',
     description:
-      'Una famiglia non è una posa. È un insieme di sguardi, di mani che si cercano, di risate inaspettate. Il mio lavoro è documentare tutto questo con naturalezza.',
+      'Un momento fotografico che racconta la vostra vera essenza, con naturalezza. Le fotografie di Famiglia parlano del vostro amore, nel momento più completo della vostra vita.',
     pricing: [
       {
         name: 'Studio',
         price: '€350',
         includes:
-          'Sessione da 1 ora · studio · 20 immagini ritoccate · Gallery privata online',
+          'Sessione da 2 ore · Studio confortevole · 100 immagini editate · Gallery privata online · Mini clip video · Guardaroba Clienti - abiti sartoriali mamma e piccini',
       },
       {
         name: 'Outdoor',
         price: '€400',
         includes:
-          'Sessione da 2 ore · location naturale · 30 immagini ritoccate · Gallery privata online',
+          'Sessione da 2 ore · Location esterna · 100 immagini editate · Mini clip video · Gallery privata online · Guardaroba clienti - abiti sartoriali mamma e piccini',
       },
     ],
     gallery: [
@@ -137,15 +131,15 @@ export const services: Service[] = [
     cover: '/images/service-smash-cake.jpg',
     heroTag: '04 —',
     excerpt:
-      'Il primo anno. La torta. La gioia pura di un bambino che scopre il mondo.',
+      'È il suo primo giro completo intorno al sole e va ricordato come la cosa più bella al mondo.',
     description:
-      'Una celebrazione piena di colore, dolcezza e risate. Lo smash cake è un momento iconico del primo anno di vita; da immortalare con immagini autentiche e vivaci.',
+      'Un momento fotografico che racchiude il suo primo anno di vita. Ti ricorderai di questo momento fatto di gioia e stupore, fatto di colori e profumi dei fiori freschi e quella torta tutta dedicata a loro.',
     pricing: [
       {
         name: 'Smash Cake',
         price: '€400',
         includes:
-          'Sessione da 2 ore · studio · 25 immagini ritoccate · Gallery privata online',
+          'Sessione da 2 ore · Studio confortevole · 100 immagini editate · Gallery privata online · Mini clip video · Guardaroba clienti - abiti sartoriali mamma e piccini · Cake topper personalizzato · Fiori freschi · Torta di cake designer personalizzata',
       },
     ],
     gallery: [
@@ -166,15 +160,15 @@ export const services: Service[] = [
     subtitle: 'Servizio fotografico',
     cover: '/images/service-christmas.jpg',
     heroTag: '05 —',
-    excerpt: 'La magia delle feste catturata per sempre.',
+    excerpt: "Il momento più atteso e magico dell'anno.",
     description:
-      'Un ritratto di famiglia in chiave natalizia. Atmosfera calda, luci soffuse, ricordi per tutta la vita. Perfetto come regalo o come auguri da condividere.',
+      'Il momento fotografico per eccellenza, il Natale qui visto nelle sue due sfaccettature più famose, in chiave Classica ed Elegante, e in chiave Bianca e pura.',
     pricing: [
       {
         name: 'Christmas',
         price: '€250',
         includes:
-          'Sessione da 1 ora · studio tematizzato · 15 immagini ritoccate · Gallery privata online',
+          'Sessione da 2 ore massimo · Studio allestito a tema · 50 immagini ritoccate · Gallery privata online',
       },
     ],
     gallery: [
@@ -195,9 +189,10 @@ export const services: Service[] = [
     subtitle: 'Servizio fotografico',
     cover: '/images/service-mother-nature.jpg',
     heroTag: '06 —',
-    excerpt: 'La bellezza della natura catturata in immagini senza tempo.',
+    excerpt:
+      'Raccontami la tua storia, vedremo insieme come valorizzare al meglio la tua essenza e trasformarla in immagini poetiche.',
     description:
-      "Servizi fotografici immersi nella natura, per catturare la bellezza dei paesaggi e dei momenti speciali all'aria aperta.",
+      'Un Momento fotografico per raccontare la vera te, nelle cornici Naturali di luoghi selezionati per valorizzare al meglio quello che sei o in studio, per rendere ancora più elegante questo progetto. Creiamo questa poesia insieme.',
     pricing: [
       {
         name: 'Mothernature',
