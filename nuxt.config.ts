@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/google-fonts',
     '@nuxtjs/sitemap',
+    '@vercel/speed-insights',
   ],
 
   sitemap: {
