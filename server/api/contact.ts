@@ -40,10 +40,12 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp-mail.outlook.com',
+    port: 587,
+    secure: false,
     auth: {
       user: config.smtpUser as string,
-      pass: String(config.smtpPass ?? '').replaceAll(/\s/g, ''),
+      pass: config.smtpPass as string,
     },
   });
 
