@@ -1,3 +1,3 @@
 User-Agent: *
 Disallow:
-Sitemap: https://www.valentinacometti.it/sitemap.xml
+Sitemap: https://www.valentinacomettifotografa.it/sitemap.xml

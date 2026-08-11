@@ -29,6 +29,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       htmlAttrs: { lang: 'it' },
+      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
       meta: [
         { name: 'robots', content: 'index, follow' },
         { property: 'og:site_name', content: 'Valentina Cometti Fotografa' },
@@ -54,7 +55,7 @@ export default defineNuxtConfig({
 
     // Public - exposed to client
     public: {
-      siteUrl: 'https://www.valentinacometti.it',
+      siteUrl: 'https://www.valentinacomettifotografa.it',
     },
   },
 });

@@ -61,15 +61,17 @@ export default defineEventHandler(async (event) => {
       ? ''
       : ` riguardo a <em>${safeService}</em>`;
 
-  // --- Notification email to Valentina ---
-  await transporter.sendMail({
-    from: `"Portfolio Valentina" <${config.smtpUser}>`,
-    to:
-      (config.contactEmail as string) || 'valentinacomettifotografa@outlook.it',
-    replyTo: email.trim(),
-    subject: `Nuova richiesta da ${safeName} – ${safeService} · valentinacometti.it`,
-    text: `Nome: ${name.trim()}\nEmail: ${email.trim()}\nServizio: ${safeService}\n\n${message.trim()}`,
-    html: `<!DOCTYPE html>
+  try {
+    // --- Notification email to Valentina ---
+    await transporter.sendMail({
+      from: `"Portfolio Valentina" <${config.smtpUser}>`,
+      to:
+        (config.contactEmail as string) ||
+        'valentinacomettifotografa@outlook.it',
+      replyTo: email.trim(),
+      subject: `Nuova richiesta da ${safeName} – ${safeService} · valentinacometti.it`,
+      text: `Nome: ${name.trim()}\nEmail: ${email.trim()}\nServizio: ${safeService}\n\n${message.trim()}`,
+      html: `<!DOCTYPE html>
 <html lang="it">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:24px 0;background:#ede8e0;font-family:Georgia,serif;">
@@ -141,15 +143,15 @@ export default defineEventHandler(async (event) => {
   </table>
 </body>
 </html>`,
-  });
+    });
 
-  // --- Confirmation email to the client ---
-  await transporter.sendMail({
-    from: `"Valentina Cometti Fotografa" <${config.smtpUser}>`,
-    to: email.trim(),
-    subject: `Ho ricevuto il tuo messaggio – Valentina Cometti`,
-    text: `Ciao ${name.trim()},\n\nGrazie per avermi scritta.\n\nHo ricevuto il tuo messaggio${serviceReplyText} e ti risponderò entro 24 ore.\n\nNel frattempo, se vuoi sognare un po', puoi sfogliare il mio portfolio o seguirmi su Instagram.\n\nA presto,\nValentina\n\n---\nValentina Cometti · Fotografa a Bergamo\n${siteUrl}`,
-    html: `<!DOCTYPE html>
+    // --- Confirmation email to the client ---
+    await transporter.sendMail({
+      from: `"Valentina Cometti Fotografa" <${config.smtpUser}>`,
+      to: email.trim(),
+      subject: `Ho ricevuto il tuo messaggio – Valentina Cometti`,
+      text: `Ciao ${name.trim()},\n\nGrazie per avermi scritta.\n\nHo ricevuto il tuo messaggio${serviceReplyText} e ti risponderò entro 24 ore.\n\nNel frattempo, se vuoi sognare un po', puoi sfogliare il mio portfolio o seguirmi su Instagram.\n\nA presto,\nValentina\n\n---\nValentina Cometti · Fotografa a Bergamo\n${siteUrl}`,
+      html: `<!DOCTYPE html>
 <html lang="it">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
 <body style="margin:0;padding:24px 0;background:#ede8e0;font-family:Georgia,serif;">
@@ -229,7 +231,15 @@ export default defineEventHandler(async (event) => {
   </table>
 </body>
 </html>`,
-  });
+    });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error('[contact] SMTP error:', msg);
+    throw createError({
+      statusCode: 502,
+      statusMessage: 'Errore invio email. Riprova più tardi.',
+    });
+  }
 
   return { ok: true };
 });
