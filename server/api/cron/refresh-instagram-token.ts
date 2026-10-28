@@ -15,6 +15,7 @@ interface VercelEnvListResponse {
 
 interface VercelDeployment {
   uid: string;
+  name: string;
 }
 
 interface VercelDeploymentListResponse {
@@ -89,20 +90,30 @@ export default defineEventHandler(async (event) => {
 
   // 4. Trigger a redeploy of the latest production deployment so the new token takes effect
   const deployList = await $fetch<VercelDeploymentListResponse>(
-    `https://api.vercel.com/v6/deployments?projectId=${projectId}&target=production&limit=1`,
-    { headers: { Authorization: `Bearer ${vercelToken}` } },
+    'https://api.vercel.com/v6/deployments',
+    {
+      query: { projectId, target: 'production', limit: 1 },
+      headers: { Authorization: `Bearer ${vercelToken}` } },
   );
   const latestDeploy = deployList.deployments[0];
-  if (latestDeploy) {
-    await $fetch('https://api.vercel.com/v13/deployments', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${vercelToken}`,
-        'Content-Type': 'application/json',
-      },
-      body: { deploymentId: latestDeploy.uid, target: 'production' },
+  if (!latestDeploy) {
+    throw createError({
+      statusCode: 500,
+      message: 'No production deployment found to redeploy',
     });
   }
+  await $fetch('https://api.vercel.com/v13/deployments', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${vercelToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: {
+      name: latestDeploy.name,
+      deploymentId: latestDeploy.uid,
+      target: 'production',
+    },
+  });
 
   return { success: true, refreshedAt: new Date().toISOString() };
 });
